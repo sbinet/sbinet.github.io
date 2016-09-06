@@ -16,13 +16,14 @@
       <guid>https://sbinet.github.io/posts/2016-08-31-hello/</guid>
       <description>
 
-&lt;h2 id=&#34;content&#34;&gt;Content&lt;/h2&gt;
+&lt;h2 id=&#34;content:746d6cf0424d6e89b7373c3b8416fbc2&#34;&gt;Content&lt;/h2&gt;
 
 &lt;p&gt;This is the first of many-many posts.&lt;/p&gt;
 
-&lt;h3 id=&#34;sub-content&#34;&gt;sub-content&lt;/h3&gt;
+&lt;h3 id=&#34;sub-content:746d6cf0424d6e89b7373c3b8416fbc2&#34;&gt;sub-content&lt;/h3&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;package main
+
 func main() {
 	println(&amp;quot;hello&amp;quot;)
 }
