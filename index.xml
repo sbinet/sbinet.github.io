@@ -5,8 +5,121 @@
     <link>https://sbinet.github.io/</link>
     <description>Recent content on 0xb1ns&gt;&gt; go run</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Wed, 31 Aug 2016 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 07 Sep 2016 10:37:07 +0200</lastBuildDate>
     <atom:link href="https://sbinet.github.io/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Starting a Go interpreter</title>
+      <link>https://sbinet.github.io/posts/2016-09-07-start-interpreter/</link>
+      <pubDate>Wed, 07 Sep 2016 10:37:07 +0200</pubDate>
+      
+      <guid>https://sbinet.github.io/posts/2016-09-07-start-interpreter/</guid>
+      <description>
+
+&lt;p&gt;In this series of posts, I&amp;rsquo;ll try to explain how one can write an interpreter
+in &lt;code&gt;Go&lt;/code&gt; and for &lt;code&gt;Go&lt;/code&gt;.
+If, like me, you lack a bit in terms of interpreters know-how, you should be
+in for a treat.&lt;/p&gt;
+
+&lt;h2 id=&#34;introduction:0017866e8944d87ddc4c4b8e47698f16&#34;&gt;Introduction&lt;/h2&gt;
+
+&lt;p&gt;&lt;code&gt;Go&lt;/code&gt; is starting to get traction in the science and data science communities.
+And, why not?
+&lt;code&gt;Go&lt;/code&gt; is fast to compile and run, is statically typed and thus presents a nice
+&amp;ldquo;edit/compile/run&amp;rdquo; development cycle.
+Moreover, a program written in &lt;code&gt;Go&lt;/code&gt; is easily deployable and cross-compilable
+on a variety of machines and operating systems.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;Go&lt;/code&gt; is also starting to have the foundation libraries for scientific work:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/gonum/blas&#34;&gt;gonum/blas&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/gonum/lapack&#34;&gt;gonum/lapack&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/gonum/integrate&#34;&gt;gonum/integrate&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/gonum/matrix&#34;&gt;gonum/matrix&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/gonum/optimize&#34;&gt;gonum/optimize&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/gonum/plot&#34;&gt;gonum/plot&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/gonum/stat&#34;&gt;gonum/stat&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;And the data science community is bootstrapping itself around the &lt;a href=&#34;https://github.com/gopherds&#34;&gt;gopherds&lt;/a&gt;
+community (slack channel: &lt;a href=&#34;https://gophers.slack.com/messages/data-science&#34;&gt;#data-science&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;For data science, a central tool and workflow is the &lt;a href=&#34;https://jupyter.org&#34;&gt;Jupyter&lt;/a&gt; and its
+notebook.
+The Jupyter notebook provides a nice &amp;ldquo;REPL&amp;rdquo;-based workflow and the ability
+to share algorithms, plots and results.
+The REPL (Read-Eval-Print-Loop) allows people to engage fast exploratory
+work of someone&amp;rsquo;s data, quickly iterating over various algorithms or
+different ways to interpret data.
+For this kind of work, an interactive interpreter is paramount.&lt;/p&gt;
+
+&lt;p&gt;But &lt;code&gt;Go&lt;/code&gt; is compiled and even if the compilation is lightning fast, a true
+interpreter is needed to integrate well with a REPL-based workflow.&lt;/p&gt;
+
+&lt;p&gt;The &lt;a href=&#34;https://github.com/go-interpreter&#34;&gt;go-interpreter&lt;/a&gt; project (also available
+on Slack: &lt;a href=&#34;https://gophers.slack.com/messages/go-interpreter&#34;&gt;#go-interpreter&lt;/a&gt;)
+is starting to work on that: implement a &lt;code&gt;Go&lt;/code&gt; interpreter, in &lt;code&gt;Go&lt;/code&gt; and for &lt;code&gt;Go&lt;/code&gt;.
+The first step is to design a bit this beast: &lt;a href=&#34;https://github.com/go-interpreter/proposal/issues/1&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Before going there, let&amp;rsquo;s do a little detour: writing a (toy) interpreter
+in &lt;code&gt;Go&lt;/code&gt; for &lt;code&gt;Python&lt;/code&gt;.
+Why? you ask&amp;hellip;
+Well, there is a very nice article in the AOSA series:
+&lt;a href=&#34;http://www.aosabook.org/en/500L/a-python-interpreter-written-in-python.html&#34;&gt;A Python interpreter written in Python&lt;/a&gt;.
+I will use it as a guide to gain a bit of knowledge in writing interpreters.&lt;/p&gt;
+
+&lt;h2 id=&#34;pygo-a-toy-python-interpreter:0017866e8944d87ddc4c4b8e47698f16&#34;&gt;PyGo: A (toy) Python interpreter&lt;/h2&gt;
+
+&lt;p&gt;In the following, I&amp;rsquo;ll show how one can write a toy &lt;code&gt;Python&lt;/code&gt; interpreter in &lt;code&gt;Go&lt;/code&gt;.
+But first, let us define exactly what &lt;code&gt;pygo&lt;/code&gt; will do.
+&lt;code&gt;pygo&lt;/code&gt; won&amp;rsquo;t lex, parse and compile &lt;code&gt;Python&lt;/code&gt; code.&lt;/p&gt;
+
+&lt;p&gt;No.
+&lt;code&gt;pygo&lt;/code&gt; will take directly the already compiled bytecode, produced with a
+&lt;code&gt;python3&lt;/code&gt; program, and then interpret the bytecode instructions:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;shell&amp;gt; python3 -m compileall -l my-file.py
+shell&amp;gt; pygo ./__pycache__/my-file.cpython-35.pyc
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;pygo&lt;/code&gt; will be a simple &lt;em&gt;bytecode interpreter&lt;/em&gt;, with a main loop fetching
+bytecode instructions and then executing them.
+In pseudo &lt;code&gt;Go&lt;/code&gt; code:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func run(instructions []instruction) {
+	for _, instruction := range instructions {
+		switch inst := instruction.(type) {
+			case opADD:
+				// perform a+b
+			case opPRINT:
+				// print values
+			// ...
+		}
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;pygo&lt;/code&gt; will export a few types to implement such an interpreter:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;a virtual machine &lt;code&gt;pygo.VM&lt;/code&gt; that will hold the call stack of frames
+and manage the execution of instructions inside the context of these frames,&lt;/li&gt;
+&lt;li&gt;a &lt;code&gt;pygo.Frame&lt;/code&gt; type to hold informations about the stack (globals, locals,
+functions&amp;rsquo; code, &amp;hellip;),&lt;/li&gt;
+&lt;li&gt;a &lt;code&gt;pygo.Block&lt;/code&gt; type to handle the control flow (&lt;code&gt;if&lt;/code&gt;, &lt;code&gt;else&lt;/code&gt;, &lt;code&gt;return&lt;/code&gt;,
+&lt;code&gt;continue&lt;/code&gt;, &lt;em&gt;etc&lt;/em&gt;&amp;hellip;),&lt;/li&gt;
+&lt;li&gt;a &lt;code&gt;pygo.Instruction&lt;/code&gt; type to model opcodes (&lt;code&gt;ADD&lt;/code&gt;, &lt;code&gt;LOAD_FAST&lt;/code&gt;, &lt;code&gt;PRINT&lt;/code&gt;, &amp;hellip;)
+and their arguments (if any).&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Ok.
+That&amp;rsquo;s enough for today.
+Stay tuned&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;In the meantime, I recommend reading the &lt;a href=&#34;http://www.aosabook.org/en/500L/a-python-interpreter-written-in-python.html&#34;&gt;AOSA article&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>My first post</title>
