@@ -318,7 +318,7 @@ I will use it as a guide to gain a bit of knowledge in writing interpreters.&lt;
 &lt;h2 id=&#34;pygo-a-toy-python-interpreter:0017866e8944d87ddc4c4b8e47698f16&#34;&gt;PyGo: A (toy) Python interpreter&lt;/h2&gt;
 
 &lt;p&gt;In the following, I&amp;rsquo;ll show how one can write a toy &lt;code&gt;Python&lt;/code&gt; interpreter in &lt;code&gt;Go&lt;/code&gt;.
-But first, let us define exactly what &lt;code&gt;pygo&lt;/code&gt; will do.
+But first, let me define exactly what &lt;code&gt;pygo&lt;/code&gt; will do.
 &lt;code&gt;pygo&lt;/code&gt; won&amp;rsquo;t lex, parse nor compile &lt;code&gt;Python&lt;/code&gt; code.&lt;/p&gt;
 
 &lt;p&gt;No.
