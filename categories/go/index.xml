@@ -41,7 +41,7 @@ It has just, somehow, got the instructions from somewhere.&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;7 + 5
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;The instruction set to interpret would look like:&lt;/p&gt;
+&lt;p&gt;The instruction set to interpret it would look like:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;code := Code{
 	Prog: []Instruction{
