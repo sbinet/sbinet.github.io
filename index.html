@@ -63,6 +63,264 @@
             
             <div class="posts">
                 
+                <h1 class="content-subhead">09 Sep 2016</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://sbinet.github.io/posts/2016-09-09-tiny-interpreter/" class="post-title">A tiny python-like interpreter</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                under 
+                                
+                                <a class="post-category post-category-go" href="https://sbinet.github.io/categories/go">go</a><a class="post-category post-category-interpreter" href="https://sbinet.github.io/categories/interpreter">interpreter</a>
+                            
+                        </p>
+                    </header>
+
+                    <div class="post-description">
+                        
+
+<p>Last episode saw me slowly building up towards setting the case for
+a <code>pygo</code> interpreter: a <code>python</code> interpreter in <code>Go</code>.</p>
+
+<p>Still following the <a href="http://www.aosabook.org/en/500L/a-python-interpreter-written-in-python.html">Python interpreter written in Python</a>
+blueprints, let me first do (yet another!) little detour:
+let me build a tiny (<code>python</code>-like) interpreter.</p>
+
+<h2 id="a-tiny-interpreter:bd97c1c6a5a23ee89e5e65c28de4f6b3">A Tiny Interpreter</h2>
+
+<p>This tiny interpreter will understand three instructions:</p>
+
+<ul>
+<li><code>LOAD_VALUE</code></li>
+<li><code>ADD_TWO_VALUES</code></li>
+<li><code>PRINT_ANSWER</code></li>
+</ul>
+
+<p>As stated before, my interpreter doesn&rsquo;t care about lexing, parsing nor compiling.
+It has just, somehow, got the instructions from somewhere.</p>
+
+<p>So, let&rsquo;s say I want to interpret:</p>
+
+<pre><code class="language-python">7 + 5
+</code></pre>
+
+<p>The instruction set to interpret would look like:</p>
+
+<pre><code class="language-go">code := Code{
+	Prog: []Instruction{
+		OpLoadValue, 0, // load first number
+		OpLoadValue, 1, // load second number
+		OpAdd,
+		OpPrint,
+	},
+	Numbers: []int{7, 5},
+}
+
+var interp Interpreter
+interp.Run(code)
+</code></pre>
+
+<hr />
+
+<p>The astute reader will probably notice I have slightly departed from
+AOSA&rsquo;s <code>python</code> code.
+In the book, each instruction is actually a 2-tuple <code>(Opcode, Value)</code>.
+Here, an instruction is just a stream of &ldquo;integers&rdquo;, being (implicitly) either
+an <code>Opcode</code> or an operand.</p>
+
+<hr />
+
+<p>The <code>CPython</code> interpreter is a <em>stack machine</em>.
+Its instruction set reflects that implementation detail and thus,
+our tiny interpreter implementation will have to cater for this aspect too:</p>
+
+<pre><code class="language-go">type Interpreter struct {
+	stack stack
+}
+
+type stack struct {
+	stk []int
+}
+</code></pre>
+
+<p>Now, the interpreter has to actually run the code, iterating over each
+instructions, pushing/popping values to/from the stack, according to
+the current instruction.
+That&rsquo;s done in the <code>Run(code Code)</code> method:</p>
+
+<pre><code class="language-go">func (interp *Interpreter) Run(code Code) {
+	prog := code.Prog
+	for pc := 0; pc &lt; len(prog); pc++ {
+		op := prog[pc].(Opcode)
+		switch op {
+		case OpLoadValue:
+			pc++
+			val := code.Numbers[prog[pc].(int)]
+			interp.stack.push(val)
+		case OpAdd:
+			lhs := interp.stack.pop()
+			rhs := interp.stack.pop()
+			sum := lhs + rhs
+			interp.stack.push(sum)
+		case OpPrint:
+			val := interp.stack.pop()
+			fmt.Println(val)
+		}
+	}
+}
+</code></pre>
+
+<p>And, yes, sure enough, running this:</p>
+
+<pre><code class="language-go">func main() {
+	code := Code{
+		Prog: []Instruction{
+			OpLoadValue, 0, // load first number
+			OpLoadValue, 1, // load second number
+			OpAdd,
+			OpPrint,
+		},
+		Numbers: []int{7, 5},
+	}
+
+	var interp Interpreter
+	interp.Run(code)
+}
+</code></pre>
+
+<p>outputs:</p>
+
+<pre><code class="language-sh">$&gt; go run ./cmd/tiny-interpreter/main.go
+12
+</code></pre>
+
+<p>The full code is here: <a href="https://github.com/sbinet/pygo/blob/4938a159499724011a7175a4f344560372ccd468/cmd/tiny-interp/main.go">github.com/sbinet/pygo/cmd/tiny-interp</a>.</p>
+
+<h2 id="variables:bd97c1c6a5a23ee89e5e65c28de4f6b3">Variables</h2>
+
+<p>The <code>AOSA</code> article sharply notices that, even though this <code>tiny-interp</code> interpreter
+is quite limited, its overall architecture and <em>modus operandi</em> are quite comparable
+to how the real <code>python</code> interpreter works.</p>
+
+<p>Save for variables.
+<code>tiny-interp</code> doesn&rsquo;t do variables.
+Let&rsquo;s fix that.</p>
+
+<p>Consider this code fragment:</p>
+
+<pre><code class="language-python">a = 1
+b = 2
+print(a+b)
+</code></pre>
+
+<p><code>tiny-interp</code> needs to be modified so that:</p>
+
+<ul>
+<li>values can be associated to names (variables), and</li>
+<li>new <code>Opcodes</code> need to be added to describe these associations.</li>
+</ul>
+
+<p>Under these new considerations, the above code fragment would be compiled
+down to the following program:</p>
+
+<pre><code class="language-go">func main() {
+	code := Code{
+		Prog: []Instruction{
+			OpLoadValue, 0,
+			OpStoreName, 0,
+			OpLoadValue, 1,
+			OpStoreName, 1,
+			OpLoadName, 0,
+			OpLoadName, 1,
+			OpAdd,
+			OpPrint,
+		},
+		Numbers: []int{1, 2},
+		Names:   []string{&quot;a&quot;, &quot;b&quot;},
+	}
+
+	interp := New()
+	interp.Run(code)
+}
+</code></pre>
+
+<p>The new opcodes <code>OpStoreName</code> and <code>OpLoadName</code> respectively store the current
+value on the stack with some variable name (the index into the <code>Names</code> slice) and
+load the value (push it on the stack) associated with the current variable.</p>
+
+<p>The <code>Interpreter</code> now looks like:</p>
+
+<pre><code class="language-go">type Interpreter struct {
+	stack stack
+	env   map[string]int
+}
+</code></pre>
+
+<p>where <code>env</code> is the association of variable names with their current value.</p>
+
+<p>The <code>Run</code> method is then modified to handle <code>OpLoadName</code> and <code>OpStoreName</code>:</p>
+
+<pre><code class="language-diff"> func (interp *Interpreter) Run(code Code) {
+@@ -63,6 +79,16 @@ func (interp *Interpreter) Run(code Code) {
+                case OpPrint:
+                        val := interp.stack.pop()
+                        fmt.Println(val)
++               case OpLoadName:
++                       pc++
++                       name := code.Names[prog[pc].(int)]
++                       val := interp.env[name]
++                       interp.stack.push(val)
++               case OpStoreName:
++                       pc++
++                       name := code.Names[prog[pc].(int)]
++                       val := interp.stack.pop()
++                       interp.env[name] = val
+                }
+        }
+ }
+</code></pre>
+
+<p>At this point, <code>tiny-interp</code> correctly handles variables:</p>
+
+<pre><code class="language-sh">$&gt; tiny-interp
+3
+</code></pre>
+
+<p>which is indeed the expected result.</p>
+
+<p>The complete code is here: <a href="https://github.com/sbinet/pygo/blob/79e9815cafa9c32e898141858502931acb3daf05/cmd/tiny-interp/main.go">github.com/sbinet/pygo/cmd/tiny-interp</a></p>
+
+<h2 id="control-flow:bd97c1c6a5a23ee89e5e65c28de4f6b3">Control flow</h2>
+
+<p><code>tiny-interp</code> is already quite great.
+I think.
+But there is at least one glaring defect.
+Consider:</p>
+
+<pre><code class="language-python">def cond():
+	x = 3
+	if x &lt; 5:
+		return &quot;yes&quot;
+	else:
+		return &quot;no&quot;
+</code></pre>
+
+<p><code>tiny-interp</code> doesn&rsquo;t handle conditionals.
+It&rsquo;s also completely ignorant about loops.
+In a nutshell, there is <strong>no control flow</strong> in <code>tiny-interp</code>.
+Yet.</p>
+
+<p>To properly implement control flow, though, <code>tiny-interp</code> will need
+to grow a new concept: activation records, also known as <code>Frames</code>.</p>
+
+<p>Stay tuned&hellip;</p>
+
+                    </div>
+                </section>
+                
                 <h1 class="content-subhead">07 Sep 2016</h1>
                 <section class="post">
                     <header class="post-header">
@@ -139,7 +397,7 @@ I will use it as a guide to gain a bit of knowledge in writing interpreters.</p>
 
 <p>In the following, I&rsquo;ll show how one can write a toy <code>Python</code> interpreter in <code>Go</code>.
 But first, let us define exactly what <code>pygo</code> will do.
-<code>pygo</code> won&rsquo;t lex, parse and compile <code>Python</code> code.</p>
+<code>pygo</code> won&rsquo;t lex, parse nor compile <code>Python</code> code.</p>
 
 <p>No.
 <code>pygo</code> will take directly the already compiled bytecode, produced with a

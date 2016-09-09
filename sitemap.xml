@@ -3,8 +3,13 @@
   
   <url>
     <loc>https://sbinet.github.io/</loc>
-    <lastmod>2016-09-07T10:37:07+02:00</lastmod>
+    <lastmod>2016-09-09T10:37:07+02:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://sbinet.github.io/posts/2016-09-09-tiny-interpreter/</loc>
+    <lastmod>2016-09-09T10:37:07+02:00</lastmod>
   </url>
   
   <url>
