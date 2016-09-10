@@ -7,7 +7,7 @@
 
     <meta name="description" content="Digital ramblings of a french gopher">
 
-    <meta name="generator" content="Hugo 0.15-DEV" />
+    <meta name="generator" content="Hugo 0.17-DEV" />
     <meta name="twitter:card" content="summary">
     
     <meta name="twitter:title" content="Posts &middot; 0xb1ns&gt;&gt; go run">
@@ -89,7 +89,7 @@ a <code>pygo</code> interpreter: a <code>python</code> interpreter in <code>Go</
 blueprints, let me first do (yet another!) little detour:
 let me build a tiny (<code>python</code>-like) interpreter.</p>
 
-<h2 id="a-tiny-interpreter:bd97c1c6a5a23ee89e5e65c28de4f6b3">A Tiny Interpreter</h2>
+<h2 id="a-tiny-interpreter">A Tiny Interpreter</h2>
 
 <p>This tiny interpreter will understand three instructions:</p>
 
@@ -107,7 +107,7 @@ It has just, somehow, got the instructions from somewhere.</p>
 <pre><code class="language-python">7 + 5
 </code></pre>
 
-<p>The instruction set to interpret it would look like:</p>
+<p>The instruction set to interpret would look like:</p>
 
 <pre><code class="language-go">code := Code{
 	Prog: []Instruction{
@@ -199,7 +199,7 @@ That&rsquo;s done in the <code>Run(code Code)</code> method:</p>
 
 <p>The full code is here: <a href="https://github.com/sbinet/pygo/blob/4938a159499724011a7175a4f344560372ccd468/cmd/tiny-interp/main.go">github.com/sbinet/pygo/cmd/tiny-interp</a>.</p>
 
-<h2 id="variables:bd97c1c6a5a23ee89e5e65c28de4f6b3">Variables</h2>
+<h2 id="variables">Variables</h2>
 
 <p>The <code>AOSA</code> article sharply notices that, even though this <code>tiny-interp</code> interpreter
 is quite limited, its overall architecture and <em>modus operandi</em> are quite comparable
@@ -293,7 +293,7 @@ load the value (push it on the stack) associated with the current variable.</p>
 
 <p>The complete code is here: <a href="https://github.com/sbinet/pygo/blob/79e9815cafa9c32e898141858502931acb3daf05/cmd/tiny-interp/main.go">github.com/sbinet/pygo/cmd/tiny-interp</a></p>
 
-<h2 id="control-flow:bd97c1c6a5a23ee89e5e65c28de4f6b3">Control flow</h2>
+<h2 id="control-flow-function-calls">Control flow &amp;&amp; function calls</h2>
 
 <p><code>tiny-interp</code> is already quite great.
 I think.
@@ -309,14 +309,19 @@ Consider:</p>
 </code></pre>
 
 <p><code>tiny-interp</code> doesn&rsquo;t handle conditionals.
-It&rsquo;s also completely ignorant about loops.
+It&rsquo;s also completely ignorant about loops and can&rsquo;t actually call
+(nor define) functions.
 In a nutshell, there is <strong>no control flow</strong> in <code>tiny-interp</code>.
 Yet.</p>
 
-<p>To properly implement control flow, though, <code>tiny-interp</code> will need
+<p>To properly implement <strong>function calls</strong>, though, <code>tiny-interp</code> will need
 to grow a new concept: activation records, also known as <code>Frames</code>.</p>
 
 <p>Stay tuned&hellip;</p>
+
+<hr />
+
+<p><em>Update:</em> correctly associate <code>Frames</code> with function calls. Thanks to <a href="https://www.reddit.com/user/munificent">/u/munificent</a>.</p>
 
                     </div>
                 </section>
@@ -345,7 +350,7 @@ in <code>Go</code> and for <code>Go</code>.
 If, like me, you lack a bit in terms of interpreters know-how, you should be
 in for a treat.</p>
 
-<h2 id="introduction:0017866e8944d87ddc4c4b8e47698f16">Introduction</h2>
+<h2 id="introduction">Introduction</h2>
 
 <p><code>Go</code> is starting to get traction in the science and data science communities.
 And, why not?
@@ -393,10 +398,10 @@ Well, there is a very nice article in the AOSA series:
 <a href="http://www.aosabook.org/en/500L/a-python-interpreter-written-in-python.html">A Python interpreter written in Python</a>.
 I will use it as a guide to gain a bit of knowledge in writing interpreters.</p>
 
-<h2 id="pygo-a-toy-python-interpreter:0017866e8944d87ddc4c4b8e47698f16">PyGo: A (toy) Python interpreter</h2>
+<h2 id="pygo-a-toy-python-interpreter">PyGo: A (toy) Python interpreter</h2>
 
 <p>In the following, I&rsquo;ll show how one can write a toy <code>Python</code> interpreter in <code>Go</code>.
-But first, let me define exactly what <code>pygo</code> will do.
+But first, let us define exactly what <code>pygo</code> will do.
 <code>pygo</code> won&rsquo;t lex, parse nor compile <code>Python</code> code.</p>
 
 <p>No.
@@ -461,11 +466,11 @@ Stay tuned&hellip;</p>
                     <div class="post-description">
                         
 
-<h2 id="content:746d6cf0424d6e89b7373c3b8416fbc2">Content</h2>
+<h2 id="content">Content</h2>
 
 <p>This is the first of many-many posts.</p>
 
-<h3 id="sub-content:746d6cf0424d6e89b7373c3b8416fbc2">sub-content</h3>
+<h3 id="sub-content">sub-content</h3>
 
 <pre><code class="language-go">package main
 
