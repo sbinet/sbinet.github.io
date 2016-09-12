@@ -23,7 +23,7 @@ a &lt;code&gt;pygo&lt;/code&gt; interpreter: a &lt;code&gt;python&lt;/code&gt; i
 blueprints, let me first do (yet another!) little detour:
 let me build a tiny (&lt;code&gt;python&lt;/code&gt;-like) interpreter.&lt;/p&gt;
 
-&lt;h2 id=&#34;a-tiny-interpreter&#34;&gt;A Tiny Interpreter&lt;/h2&gt;
+&lt;h2 id=&#34;a-tiny-interpreter:bd97c1c6a5a23ee89e5e65c28de4f6b3&#34;&gt;A Tiny Interpreter&lt;/h2&gt;
 
 &lt;p&gt;This tiny interpreter will understand three instructions:&lt;/p&gt;
 
@@ -41,7 +41,7 @@ It has just, somehow, got the instructions from somewhere.&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;7 + 5
 &lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;The instruction set to interpret would look like:&lt;/p&gt;
+&lt;p&gt;The instruction set to interpret it would look like:&lt;/p&gt;
 
 &lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;code := Code{
 	Prog: []Instruction{
@@ -133,7 +133,7 @@ That&amp;rsquo;s done in the &lt;code&gt;Run(code Code)&lt;/code&gt; method:&lt;
 
 &lt;p&gt;The full code is here: &lt;a href=&#34;https://github.com/sbinet/pygo/blob/4938a159499724011a7175a4f344560372ccd468/cmd/tiny-interp/main.go&#34;&gt;github.com/sbinet/pygo/cmd/tiny-interp&lt;/a&gt;.&lt;/p&gt;
 
-&lt;h2 id=&#34;variables&#34;&gt;Variables&lt;/h2&gt;
+&lt;h2 id=&#34;variables:bd97c1c6a5a23ee89e5e65c28de4f6b3&#34;&gt;Variables&lt;/h2&gt;
 
 &lt;p&gt;The &lt;code&gt;AOSA&lt;/code&gt; article sharply notices that, even though this &lt;code&gt;tiny-interp&lt;/code&gt; interpreter
 is quite limited, its overall architecture and &lt;em&gt;modus operandi&lt;/em&gt; are quite comparable
@@ -227,7 +227,7 @@ load the value (push it on the stack) associated with the current variable.&lt;/
 
 &lt;p&gt;The complete code is here: &lt;a href=&#34;https://github.com/sbinet/pygo/blob/79e9815cafa9c32e898141858502931acb3daf05/cmd/tiny-interp/main.go&#34;&gt;github.com/sbinet/pygo/cmd/tiny-interp&lt;/a&gt;&lt;/p&gt;
 
-&lt;h2 id=&#34;control-flow-function-calls&#34;&gt;Control flow &amp;amp;&amp;amp; function calls&lt;/h2&gt;
+&lt;h2 id=&#34;control-flow-function-calls:bd97c1c6a5a23ee89e5e65c28de4f6b3&#34;&gt;Control flow &amp;amp;&amp;amp; function calls&lt;/h2&gt;
 
 &lt;p&gt;&lt;code&gt;tiny-interp&lt;/code&gt; is already quite great.
 I think.
@@ -272,7 +272,7 @@ in &lt;code&gt;Go&lt;/code&gt; and for &lt;code&gt;Go&lt;/code&gt;.
 If, like me, you lack a bit in terms of interpreters know-how, you should be
 in for a treat.&lt;/p&gt;
 
-&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;h2 id=&#34;introduction:0017866e8944d87ddc4c4b8e47698f16&#34;&gt;Introduction&lt;/h2&gt;
 
 &lt;p&gt;&lt;code&gt;Go&lt;/code&gt; is starting to get traction in the science and data science communities.
 And, why not?
@@ -320,10 +320,10 @@ Well, there is a very nice article in the AOSA series:
 &lt;a href=&#34;http://www.aosabook.org/en/500L/a-python-interpreter-written-in-python.html&#34;&gt;A Python interpreter written in Python&lt;/a&gt;.
 I will use it as a guide to gain a bit of knowledge in writing interpreters.&lt;/p&gt;
 
-&lt;h2 id=&#34;pygo-a-toy-python-interpreter&#34;&gt;PyGo: A (toy) Python interpreter&lt;/h2&gt;
+&lt;h2 id=&#34;pygo-a-toy-python-interpreter:0017866e8944d87ddc4c4b8e47698f16&#34;&gt;PyGo: A (toy) Python interpreter&lt;/h2&gt;
 
 &lt;p&gt;In the following, I&amp;rsquo;ll show how one can write a toy &lt;code&gt;Python&lt;/code&gt; interpreter in &lt;code&gt;Go&lt;/code&gt;.
-But first, let us define exactly what &lt;code&gt;pygo&lt;/code&gt; will do.
+But first, let me define exactly what &lt;code&gt;pygo&lt;/code&gt; will do.
 &lt;code&gt;pygo&lt;/code&gt; won&amp;rsquo;t lex, parse nor compile &lt;code&gt;Python&lt;/code&gt; code.&lt;/p&gt;
 
 &lt;p&gt;No.
