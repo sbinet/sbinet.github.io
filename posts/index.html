@@ -7,7 +7,7 @@
 
     <meta name="description" content="Digital ramblings of a french gopher">
 
-    <meta name="generator" content="Hugo 0.15-DEV" />
+    <meta name="generator" content="Hugo 0.29-DEV" />
     <meta name="twitter:card" content="summary">
     
     <meta name="twitter:title" content="Posts &middot; 0xb1ns&gt;&gt; go run">
@@ -63,6 +63,400 @@
             
             <div class="posts">
                 
+                <h1 class="content-subhead">04 Oct 2017, 11:17</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://sbinet.github.io/posts/2017-10-04-intro-to-stats-with-gonum/" class="post-title">Introduction to Statistics With Gonum</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                under 
+                                
+                                <a class="post-category post-category-go" href="https://sbinet.github.io/categories/go">go</a><a class="post-category post-category-gonum" href="https://sbinet.github.io/categories/gonum">gonum</a><a class="post-category post-category-statistics" href="https://sbinet.github.io/categories/statistics">statistics</a>
+                            
+                        </p>
+                    </header>
+
+                    <div class="post-description">
+                        
+
+<p>Starting a bit of a new series (hopefully with more posts than with the interpreter ones) about using <a href="https://gonum.org">Gonum</a> to apply statistics.</p>
+
+<p>This first post is really just a copy-paste of this one:</p>
+
+<p><a href="https://mubaris.com/2017-09-09/introduction-to-statistics-using-numpy">https://mubaris.com/2017-09-09/introduction-to-statistics-using-numpy</a></p>
+
+<p>but using <a href="https://golang.org">Go</a> and <a href="https://gonum.org">Gonum</a> instead of Python and <code>numpy</code>.</p>
+
+<h1 id="go-gonum">Go &amp; Gonum</h1>
+
+<p><a href="https://gonum.org">Gonum</a> is <em>&ldquo;a set of packages designed to make writing numeric and scientific algorithms productive, performant and scalable.&rdquo;</em></p>
+
+<p>Before being able to use <code>Gonum</code>, we need to install <a href="https://golang.org">Go</a>.
+We can download and install the <code>Go</code> toolchain for a variety of platforms and operating systems from <a href="https://golang.org/dl">golang.org/dl</a>.</p>
+
+<p>Once that has been done, installing <code>Gonum</code> and all its dependencies can be done with:</p>
+
+<pre><code class="language-sh">$&gt; go get gonum.org/v1/gonum/...
+</code></pre>
+
+<p>If you had a previous installation of <code>Gonum</code>, you can re-install it and update it to the latest one like so:</p>
+
+<pre><code class="language-sh">$&gt; go get -u gonum.org/v1/gonum/...
+</code></pre>
+
+<h1 id="gonum-and-statistics">Gonum and statistics</h1>
+
+<p>Gonum provides many statistical functions.
+Let&rsquo;s use it to calculate the mean, median, standard deviation and variance of a small dataset.</p>
+
+<pre><code class="language-go">// file: stats.go
+
+package main
+
+import (
+	&quot;fmt&quot;
+	&quot;math&quot;
+	&quot;sort&quot;
+
+	&quot;gonum.org/v1/gonum/stat&quot;
+)
+
+func main() {
+	xs := []float64{
+		32.32, 56.98, 21.52, 44.32,
+		55.63, 13.75, 43.47, 43.34,
+		12.34,
+	}
+
+	fmt.Printf(&quot;data: %v\n&quot;, xs)
+
+	sort.Float64s(xs)
+	fmt.Printf(&quot;data: %v (sorted)\n&quot;, xs)
+
+	// computes the weighted mean of the dataset.
+	// we don't have any weights (ie: all weights are 1)
+	// so we just pass a nil slice.
+	mean := stat.Mean(xs, nil)
+
+	// computes the median of the dataset.
+	// here as well, we pass a nil slice as weights.
+	median := stat.Quantile(0.5, stat.Empirical, xs, nil)
+
+	variance := stat.Variance(xs, nil)
+	stddev := math.Sqrt(variance)
+
+	fmt.Printf(&quot;mean=     %v\n&quot;, mean)
+	fmt.Printf(&quot;median=   %v\n&quot;, median)
+	fmt.Printf(&quot;variance= %v\n&quot;, variance)
+	fmt.Printf(&quot;std-dev=  %v\n&quot;, stddev)
+}
+</code></pre>
+
+<p>The program above performs some rather basic statistical operations on our dataset:</p>
+
+<pre><code class="language-sh">$&gt; go run stats.go
+data: [32.32 56.98 21.52 44.32 55.63 13.75 43.47 43.34 12.34]
+data: [12.34 13.75 21.52 32.32 43.34 43.47 44.32 55.63 56.98] (sorted)
+mean=     35.96333333333334
+median=   43.34
+variance= 285.306875
+std-dev=  16.891029423927957
+</code></pre>
+
+<p>The astute reader will no doubt notice that the variance value displayed here
+differs from the one obtained with <code>numpy.var</code>:</p>
+
+<pre><code class="language-python">&gt;&gt;&gt; xs=[32.32, 56.98, 21.52, 44.32, 55.63, 13.75, 43.47, 43.34, 12.34]
+&gt;&gt;&gt; xs.sort()
+&gt;&gt;&gt; np.mean(xs)
+35.963333333333338
+&gt;&gt;&gt; np.median(xs)
+43.340000000000003
+&gt;&gt;&gt; np.var(xs)
+253.60611111111109
+&gt;&gt;&gt; np.std(xs)
+15.925015262507948
+</code></pre>
+
+<p>This is because <code>numpy.var</code> uses <code>len(xs)</code> as the divisor while <code>gonum/stats</code>
+uses the unbiased sample variance (<em>ie:</em> the divisor is <code>len(xs)-1</code>):</p>
+
+<pre><code class="language-python">&gt;&gt;&gt; np.var(xs, ddof=1)
+285.30687499999999
+&gt;&gt;&gt; np.std(x, ddof=1)
+16.891029423927957
+</code></pre>
+
+<p>With this quite blunt tool, we can analyse some real data from real life.
+We will use a dataset pertaining to the salary of European developers, all 1147 of them :).
+We have this dataset in a file named <code>salary.txt</code>.</p>
+
+<pre><code class="language-go">// file: stats-salary.go
+
+package main
+
+import (
+	&quot;bufio&quot;
+	&quot;fmt&quot;
+	&quot;log&quot;
+	&quot;math&quot;
+	&quot;os&quot;
+	&quot;sort&quot;
+
+	&quot;gonum.org/v1/gonum/stat&quot;
+)
+
+func main() {
+	f, err := os.Open(&quot;salary.txt&quot;)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+
+	var xs []float64
+	scan := bufio.NewScanner(f)
+	for scan.Scan() {
+		var v float64
+		txt := scan.Text()
+		_, err = fmt.Sscanf(txt, &quot;%f&quot;, &amp;v)
+		if err != nil {
+			log.Fatalf(
+				&quot;could not convert to float64 %q: %v&quot;,
+				txt, err,
+			)
+		}
+		xs = append(xs, v)
+	}
+
+	// make sure scanning the file and extracting values
+	// went fine, without any error.
+	if err = scan.Err(); err != nil {
+		log.Fatalf(&quot;error scanning file: %v&quot;, err)
+	}
+
+	fmt.Printf(&quot;data sample size: %v\n&quot;, len(xs))
+
+	sort.Float64s(xs)
+
+	mean := stat.Mean(xs, nil)
+	median := stat.Quantile(0.5, stat.Empirical, xs, nil)
+	variance := stat.Variance(xs, nil)
+	stddev := math.Sqrt(variance)
+
+	fmt.Printf(&quot;mean=     %v\n&quot;, mean)
+	fmt.Printf(&quot;median=   %v\n&quot;, median)
+	fmt.Printf(&quot;variance= %v\n&quot;, variance)
+	fmt.Printf(&quot;std-dev=  %v\n&quot;, stddev)
+}
+</code></pre>
+
+<p>And here is the output:</p>
+
+<pre><code>$&gt; go run ./stats-salary.go
+data sample size: 1147
+mean=     55894.53879686138
+median=   48000
+variance= 3.0464263289031615e+09
+std-dev=  55194.44110508921
+</code></pre>
+
+<p>The data file can be obtained from here: <a href="https://sbinet.github.io/code/2017-10-04/salary.txt">salary.txt</a>
+together with a much more detailed one there: <a href="https://sbinet.github.io/code/2017-10-04/salary.csv">salary.csv</a>.</p>
+
+                    </div>
+                </section>
+                
+                <h1 class="content-subhead">12 Sep 2016, 14:35</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://sbinet.github.io/posts/2016-09-12-pygo-vm/" class="post-title">Introduction to the pygo virtual machine</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                under 
+                                
+                                <a class="post-category post-category-go" href="https://sbinet.github.io/categories/go">go</a><a class="post-category post-category-interpreter" href="https://sbinet.github.io/categories/interpreter">interpreter</a>
+                            
+                        </p>
+                    </header>
+
+                    <div class="post-description">
+                        
+
+<p>In the last episode, I have showed a rather important limitation of the <code>tiny-interp</code>
+interpreter:</p>
+
+<pre><code class="language-python">def cond():
+	x = 3
+	if x &lt; 5:
+		return &quot;yes&quot;
+	else:
+		return &quot;no&quot;
+</code></pre>
+
+<p>Control flow and function calls were not handled, as a result <code>tiny-interp</code> could
+not interpret the above code fragment.</p>
+
+<p>In the following, I&rsquo;ll ditch <code>tiny-interp</code> and switch to the &ldquo;real&rdquo; <code>pygo</code>
+interpreter.</p>
+
+<h2 id="real-python-bytecode">Real Python bytecode</h2>
+
+<p>People having read the AOSA article know that the structure of the bytecode of
+the <code>tiny-interp</code> interpreter instruction set is in fact very similar to the
+one of the real python bytecode.</p>
+
+<p>Indeed, if one defines the above <code>cond()</code> function in a <code>python3</code> prompt and
+enters:</p>
+
+<pre><code class="language-python">### bytecode as raw bytes
+&gt;&gt;&gt; print(cond.__code__.co_code)
+b'd\x01\x00}\x00\x00|\x00\x00d\x02\x00k\x00\x00r\x16\x00d\x03
+\x00Sd\x04\x00Sd\x00\x00S'
+
+### bytecode as numbers
+&gt;&gt;&gt; print(list(cond.__code__.co_code))
+[100, 1, 0, 125, 0, 0, 124, 0, 0, 100, 2, 0, 107,
+0, 0, 114, 22, 0, 100, 3, 0, 83, 100, 4, 0, 83,
+100, 0, 0, 83]
+</code></pre>
+
+<p>This doesn&rsquo;t look very human friendly.
+Luckily, there is the <code>dis</code> module that can ingest low-level bytecode
+and prints it in a more human-readable way:</p>
+
+<pre><code class="language-python">&gt;&gt;&gt; import dis
+&gt;&gt;&gt; dis.dis(cond)
+  2           0 LOAD_CONST               1 (3)
+              3 STORE_FAST               0 (x)
+
+  3           6 LOAD_FAST                0 (x)
+              9 LOAD_CONST               2 (5)
+             12 COMPARE_OP               0 (&lt;)
+             15 POP_JUMP_IF_FALSE       22
+
+  4          18 LOAD_CONST               3 ('yes')
+             21 RETURN_VALUE
+
+  6     &gt;&gt;   22 LOAD_CONST               4 ('no')
+             25 RETURN_VALUE
+             26 LOAD_CONST               0 (None)
+             29 RETURN_VALUE
+</code></pre>
+
+<p>Have a look at the official <a href="https://docs.python.org/3/library/dis.html"><code>dis</code></a>
+module documentation for more informations.
+In a nutshell, the <code>LOAD_CONST</code> is the same than our toy <code>OpLoadValue</code> and <code>LOAD_FAST</code>
+is the same than our toy <code>OpLoadName</code>.</p>
+
+<p>Simply inspecting this little bytecode snippet shows how conditions and branch-y
+code might be handled.
+The instruction <code>POP_JUMP_IF_FALSE</code> implements the <code>if x &lt; 5</code> statement from the
+<code>cond()</code> function.
+If the condition is <code>false</code> (<em>i.e.:</em> <code>x</code> is greater or equal than <code>5</code>), the interpreter
+is instructed to jump to position <code>22</code> in the bytecode stream, <em>i.e.</em> the <code>return &quot;no&quot;</code>
+body of the <code>false</code> branch.
+Loops are handled pretty much the same way:</p>
+
+<pre><code class="language-python">&gt;&gt;&gt; def loop():
+...     x = 1
+...     while x &lt; 5:
+...             x = x + 1
+...     return x
+... 
+&gt;&gt;&gt; dis.dis(loop)
+  2           0 LOAD_CONST               1 (1)
+              3 STORE_FAST               0 (x)
+
+  3           6 SETUP_LOOP              26 (to 35)
+        &gt;&gt;    9 LOAD_FAST                0 (x)
+             12 LOAD_CONST               2 (5)
+             15 COMPARE_OP               0 (&lt;)
+             18 POP_JUMP_IF_FALSE       34
+
+  4          21 LOAD_FAST                0 (x)
+             24 LOAD_CONST               1 (1)
+             27 BINARY_ADD
+             28 STORE_FAST               0 (x)
+             31 JUMP_ABSOLUTE            9
+        &gt;&gt;   34 POP_BLOCK
+
+  5     &gt;&gt;   35 LOAD_FAST                0 (x)
+             38 RETURN_VALUE
+</code></pre>
+
+<p>The above bytecode dump should be rather self-explanatory.
+Except perhaps for the <code>RETURN_VALUE</code> instruction: where does the
+instruction return to?</p>
+
+<p>To answer this, a new concept must be introduced: the <code>Frame</code>.</p>
+
+<h2 id="frames">Frames</h2>
+
+<p>As the AOSA article puts it:</p>
+
+<p><em>A frame is a collection of information[s] and context for a chunk of code.</em></p>
+
+<p>Whenever a function is called, a new <code>Frame</code> is created, carrying a <em>data stack</em>
+(the local variables we have played with so far) and a <em>block stack</em> (to handle
+control flow such as loops and exceptions.)</p>
+
+<p>The <code>RETURN_VALUE</code> instructs the interpreter to pass a value between <code>Frames</code>,
+from the callee&rsquo;s data stack back to the caller&rsquo;s data stack.</p>
+
+<p>I&rsquo;ll show the <code>pygo</code> implementation of a <code>Frame</code> in a moment.</p>
+
+<h2 id="pygo-components">Pygo components</h2>
+
+<p>Still following the blueprints of AOSA and <code>byterun</code>, <code>pygo</code> is built on
+the following types:</p>
+
+<ul>
+<li><p>a <code>VM</code> (virtual machine) which manages the high-level structures (call stack
+of frames, mapping of instructions to operations, etc&hellip;).
+The <code>VM</code> is a slightly more complex version of the previous <code>Interpreter</code>
+type from <code>tiny-interp</code>,</p></li>
+
+<li><p>a <code>Frame</code>: every <code>Frame</code> value contains a code value and manages some state
+(such as the global and local namespaces, a pointer to the calling <code>Frame</code>
+and the last bytecode instruction executed),</p></li>
+
+<li><p>a <code>Function</code> to model real Python functions: this is to correctly handle
+the creation and destruction of <code>Frames</code>,</p></li>
+
+<li><p>a <code>Block</code> to handle Python block management on to which control flow and loops
+are mapped.</p></li>
+</ul>
+
+<h3 id="virtual-machine">Virtual machine</h3>
+
+<p>Each value of a <code>pygo.VM</code> must store the call stack, the Python
+exception state and the return values as they flow between frames:</p>
+
+<pre><code class="language-go">type VM struct {
+	frames Frames    // call stack of Frames
+	fp     *Frame    // pointer to current Frame
+	ret    Value     // return value
+	exc    Exception // last exception
+}
+</code></pre>
+
+<p>A <code>pygo.VM</code> value can run bytecode with the <code>RunCode</code> method:</p>
+
+<pre><code class="language-go">func (vm *VM) RunCode(code Code, globals, locals map[string]Value) (Value, error) {
+	frame := vm.makeFrame(code, globals, locals, vm.fp)
+	return vm.runFrame(frame)
+}
+</code></pre>
+
+                    </div>
+                </section>
+                
                 <h1 class="content-subhead">09 Sep 2016, 10:37</h1>
                 <section class="post">
                     <header class="post-header">
@@ -89,7 +483,7 @@ a <code>pygo</code> interpreter: a <code>python</code> interpreter in <code>Go</
 blueprints, let me first do (yet another!) little detour:
 let me build a tiny (<code>python</code>-like) interpreter.</p>
 
-<h2 id="a-tiny-interpreter:bd97c1c6a5a23ee89e5e65c28de4f6b3">A Tiny Interpreter</h2>
+<h2 id="a-tiny-interpreter">A Tiny Interpreter</h2>
 
 <p>This tiny interpreter will understand three instructions:</p>
 
@@ -199,7 +593,7 @@ That&rsquo;s done in the <code>Run(code Code)</code> method:</p>
 
 <p>The full code is here: <a href="https://github.com/sbinet/pygo/blob/4938a159499724011a7175a4f344560372ccd468/cmd/tiny-interp/main.go">github.com/sbinet/pygo/cmd/tiny-interp</a>.</p>
 
-<h2 id="variables:bd97c1c6a5a23ee89e5e65c28de4f6b3">Variables</h2>
+<h2 id="variables">Variables</h2>
 
 <p>The <code>AOSA</code> article sharply notices that, even though this <code>tiny-interp</code> interpreter
 is quite limited, its overall architecture and <em>modus operandi</em> are quite comparable
@@ -293,7 +687,7 @@ load the value (push it on the stack) associated with the current variable.</p>
 
 <p>The complete code is here: <a href="https://github.com/sbinet/pygo/blob/79e9815cafa9c32e898141858502931acb3daf05/cmd/tiny-interp/main.go">github.com/sbinet/pygo/cmd/tiny-interp</a></p>
 
-<h2 id="control-flow-function-calls:bd97c1c6a5a23ee89e5e65c28de4f6b3">Control flow &amp;&amp; function calls</h2>
+<h2 id="control-flow-function-calls">Control flow &amp;&amp; function calls</h2>
 
 <p><code>tiny-interp</code> is already quite great.
 I think.
@@ -350,7 +744,7 @@ in <code>Go</code> and for <code>Go</code>.
 If, like me, you lack a bit in terms of interpreters know-how, you should be
 in for a treat.</p>
 
-<h2 id="introduction:0017866e8944d87ddc4c4b8e47698f16">Introduction</h2>
+<h2 id="introduction">Introduction</h2>
 
 <p><code>Go</code> is starting to get traction in the science and data science communities.
 And, why not?
@@ -398,7 +792,7 @@ Well, there is a very nice article in the AOSA series:
 <a href="http://www.aosabook.org/en/500L/a-python-interpreter-written-in-python.html">A Python interpreter written in Python</a>.
 I will use it as a guide to gain a bit of knowledge in writing interpreters.</p>
 
-<h2 id="pygo-a-toy-python-interpreter:0017866e8944d87ddc4c4b8e47698f16">PyGo: A (toy) Python interpreter</h2>
+<h2 id="pygo-a-toy-python-interpreter">PyGo: A (toy) Python interpreter</h2>
 
 <p>In the following, I&rsquo;ll show how one can write a toy <code>Python</code> interpreter in <code>Go</code>.
 But first, let me define exactly what <code>pygo</code> will do.
@@ -466,11 +860,11 @@ Stay tuned&hellip;</p>
                     <div class="post-description">
                         
 
-<h2 id="content:746d6cf0424d6e89b7373c3b8416fbc2">Content</h2>
+<h2 id="content">Content</h2>
 
 <p>This is the first of many-many posts.</p>
 
-<h3 id="sub-content:746d6cf0424d6e89b7373c3b8416fbc2">sub-content</h3>
+<h3 id="sub-content">sub-content</h3>
 
 <pre><code class="language-go">package main
 

@@ -5,8 +5,36 @@
     <link>https://sbinet.github.io/categories/go/</link>
     <description>Recent content in Go on 0xb1ns&gt;&gt; go run</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Fri, 09 Sep 2016 10:37:07 +0200</lastBuildDate>
-    <atom:link href="https://sbinet.github.io/categories/go/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 04 Oct 2017 11:17:11 +0200</lastBuildDate>
+    
+	<atom:link href="https://sbinet.github.io/categories/go/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Introduction to Statistics With Gonum</title>
+      <link>https://sbinet.github.io/posts/2017-10-04-intro-to-stats-with-gonum/</link>
+      <pubDate>Wed, 04 Oct 2017 11:17:11 +0200</pubDate>
+      
+      <guid>https://sbinet.github.io/posts/2017-10-04-intro-to-stats-with-gonum/</guid>
+      <description>Starting a bit of a new series (hopefully with more posts than with the interpreter ones) about using Gonum to apply statistics.
+This first post is really just a copy-paste of this one:
+https://mubaris.com/2017-09-09/introduction-to-statistics-using-numpy
+but using Go and Gonum instead of Python and numpy.
+Go &amp;amp; Gonum Gonum is &amp;ldquo;a set of packages designed to make writing numeric and scientific algorithms productive, performant and scalable.&amp;rdquo;
+Before being able to use Gonum, we need to install Go.</description>
+    </item>
+    
+    <item>
+      <title>Introduction to the pygo virtual machine</title>
+      <link>https://sbinet.github.io/posts/2016-09-12-pygo-vm/</link>
+      <pubDate>Mon, 12 Sep 2016 14:35:31 +0200</pubDate>
+      
+      <guid>https://sbinet.github.io/posts/2016-09-12-pygo-vm/</guid>
+      <description>In the last episode, I have showed a rather important limitation of the tiny-interp interpreter:
+def cond(): x = 3 if x &amp;lt; 5: return &amp;quot;yes&amp;quot; else: return &amp;quot;no&amp;quot;  Control flow and function calls were not handled, as a result tiny-interp could not interpret the above code fragment.
+In the following, I&amp;rsquo;ll ditch tiny-interp and switch to the &amp;ldquo;real&amp;rdquo; pygo interpreter.
+Real Python bytecode People having read the AOSA article know that the structure of the bytecode of the tiny-interp interpreter instruction set is in fact very similar to the one of the real python bytecode.</description>
+    </item>
     
     <item>
       <title>A tiny python-like interpreter</title>
@@ -14,249 +42,10 @@
       <pubDate>Fri, 09 Sep 2016 10:37:07 +0200</pubDate>
       
       <guid>https://sbinet.github.io/posts/2016-09-09-tiny-interpreter/</guid>
-      <description>
-
-&lt;p&gt;Last episode saw me slowly building up towards setting the case for
-a &lt;code&gt;pygo&lt;/code&gt; interpreter: a &lt;code&gt;python&lt;/code&gt; interpreter in &lt;code&gt;Go&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Still following the &lt;a href=&#34;http://www.aosabook.org/en/500L/a-python-interpreter-written-in-python.html&#34;&gt;Python interpreter written in Python&lt;/a&gt;
-blueprints, let me first do (yet another!) little detour:
-let me build a tiny (&lt;code&gt;python&lt;/code&gt;-like) interpreter.&lt;/p&gt;
-
-&lt;h2 id=&#34;a-tiny-interpreter:bd97c1c6a5a23ee89e5e65c28de4f6b3&#34;&gt;A Tiny Interpreter&lt;/h2&gt;
-
-&lt;p&gt;This tiny interpreter will understand three instructions:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;LOAD_VALUE&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;ADD_TWO_VALUES&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;PRINT_ANSWER&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;As stated before, my interpreter doesn&amp;rsquo;t care about lexing, parsing nor compiling.
-It has just, somehow, got the instructions from somewhere.&lt;/p&gt;
-
-&lt;p&gt;So, let&amp;rsquo;s say I want to interpret:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;7 + 5
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The instruction set to interpret it would look like:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;code := Code{
-	Prog: []Instruction{
-		OpLoadValue, 0, // load first number
-		OpLoadValue, 1, // load second number
-		OpAdd,
-		OpPrint,
-	},
-	Numbers: []int{7, 5},
-}
-
-var interp Interpreter
-interp.Run(code)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;The astute reader will probably notice I have slightly departed from
-AOSA&amp;rsquo;s &lt;code&gt;python&lt;/code&gt; code.
-In the book, each instruction is actually a 2-tuple &lt;code&gt;(Opcode, Value)&lt;/code&gt;.
-Here, an instruction is just a stream of &amp;ldquo;integers&amp;rdquo;, being (implicitly) either
-an &lt;code&gt;Opcode&lt;/code&gt; or an operand.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;The &lt;code&gt;CPython&lt;/code&gt; interpreter is a &lt;em&gt;stack machine&lt;/em&gt;.
-Its instruction set reflects that implementation detail and thus,
-our tiny interpreter implementation will have to cater for this aspect too:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;type Interpreter struct {
-	stack stack
-}
-
-type stack struct {
-	stk []int
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Now, the interpreter has to actually run the code, iterating over each
-instructions, pushing/popping values to/from the stack, according to
-the current instruction.
-That&amp;rsquo;s done in the &lt;code&gt;Run(code Code)&lt;/code&gt; method:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func (interp *Interpreter) Run(code Code) {
-	prog := code.Prog
-	for pc := 0; pc &amp;lt; len(prog); pc++ {
-		op := prog[pc].(Opcode)
-		switch op {
-		case OpLoadValue:
-			pc++
-			val := code.Numbers[prog[pc].(int)]
-			interp.stack.push(val)
-		case OpAdd:
-			lhs := interp.stack.pop()
-			rhs := interp.stack.pop()
-			sum := lhs + rhs
-			interp.stack.push(sum)
-		case OpPrint:
-			val := interp.stack.pop()
-			fmt.Println(val)
-		}
-	}
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;And, yes, sure enough, running this:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func main() {
-	code := Code{
-		Prog: []Instruction{
-			OpLoadValue, 0, // load first number
-			OpLoadValue, 1, // load second number
-			OpAdd,
-			OpPrint,
-		},
-		Numbers: []int{7, 5},
-	}
-
-	var interp Interpreter
-	interp.Run(code)
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;outputs:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$&amp;gt; go run ./cmd/tiny-interpreter/main.go
-12
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The full code is here: &lt;a href=&#34;https://github.com/sbinet/pygo/blob/4938a159499724011a7175a4f344560372ccd468/cmd/tiny-interp/main.go&#34;&gt;github.com/sbinet/pygo/cmd/tiny-interp&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&#34;variables:bd97c1c6a5a23ee89e5e65c28de4f6b3&#34;&gt;Variables&lt;/h2&gt;
-
-&lt;p&gt;The &lt;code&gt;AOSA&lt;/code&gt; article sharply notices that, even though this &lt;code&gt;tiny-interp&lt;/code&gt; interpreter
-is quite limited, its overall architecture and &lt;em&gt;modus operandi&lt;/em&gt; are quite comparable
-to how the real &lt;code&gt;python&lt;/code&gt; interpreter works.&lt;/p&gt;
-
-&lt;p&gt;Save for variables.
-&lt;code&gt;tiny-interp&lt;/code&gt; doesn&amp;rsquo;t do variables.
-Let&amp;rsquo;s fix that.&lt;/p&gt;
-
-&lt;p&gt;Consider this code fragment:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;a = 1
-b = 2
-print(a+b)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;tiny-interp&lt;/code&gt; needs to be modified so that:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;values can be associated to names (variables), and&lt;/li&gt;
-&lt;li&gt;new &lt;code&gt;Opcodes&lt;/code&gt; need to be added to describe these associations.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Under these new considerations, the above code fragment would be compiled
-down to the following program:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func main() {
-	code := Code{
-		Prog: []Instruction{
-			OpLoadValue, 0,
-			OpStoreName, 0,
-			OpLoadValue, 1,
-			OpStoreName, 1,
-			OpLoadName, 0,
-			OpLoadName, 1,
-			OpAdd,
-			OpPrint,
-		},
-		Numbers: []int{1, 2},
-		Names:   []string{&amp;quot;a&amp;quot;, &amp;quot;b&amp;quot;},
-	}
-
-	interp := New()
-	interp.Run(code)
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The new opcodes &lt;code&gt;OpStoreName&lt;/code&gt; and &lt;code&gt;OpLoadName&lt;/code&gt; respectively store the current
-value on the stack with some variable name (the index into the &lt;code&gt;Names&lt;/code&gt; slice) and
-load the value (push it on the stack) associated with the current variable.&lt;/p&gt;
-
-&lt;p&gt;The &lt;code&gt;Interpreter&lt;/code&gt; now looks like:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;type Interpreter struct {
-	stack stack
-	env   map[string]int
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;where &lt;code&gt;env&lt;/code&gt; is the association of variable names with their current value.&lt;/p&gt;
-
-&lt;p&gt;The &lt;code&gt;Run&lt;/code&gt; method is then modified to handle &lt;code&gt;OpLoadName&lt;/code&gt; and &lt;code&gt;OpStoreName&lt;/code&gt;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-diff&#34;&gt; func (interp *Interpreter) Run(code Code) {
-@@ -63,6 +79,16 @@ func (interp *Interpreter) Run(code Code) {
-                case OpPrint:
-                        val := interp.stack.pop()
-                        fmt.Println(val)
-+               case OpLoadName:
-+                       pc++
-+                       name := code.Names[prog[pc].(int)]
-+                       val := interp.env[name]
-+                       interp.stack.push(val)
-+               case OpStoreName:
-+                       pc++
-+                       name := code.Names[prog[pc].(int)]
-+                       val := interp.stack.pop()
-+                       interp.env[name] = val
-                }
-        }
- }
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;At this point, &lt;code&gt;tiny-interp&lt;/code&gt; correctly handles variables:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;$&amp;gt; tiny-interp
-3
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;which is indeed the expected result.&lt;/p&gt;
-
-&lt;p&gt;The complete code is here: &lt;a href=&#34;https://github.com/sbinet/pygo/blob/79e9815cafa9c32e898141858502931acb3daf05/cmd/tiny-interp/main.go&#34;&gt;github.com/sbinet/pygo/cmd/tiny-interp&lt;/a&gt;&lt;/p&gt;
-
-&lt;h2 id=&#34;control-flow-function-calls:bd97c1c6a5a23ee89e5e65c28de4f6b3&#34;&gt;Control flow &amp;amp;&amp;amp; function calls&lt;/h2&gt;
-
-&lt;p&gt;&lt;code&gt;tiny-interp&lt;/code&gt; is already quite great.
-I think.
-But there is at least one glaring defect.
-Consider:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-python&#34;&gt;def cond():
-	x = 3
-	if x &amp;lt; 5:
-		return &amp;quot;yes&amp;quot;
-	else:
-		return &amp;quot;no&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;tiny-interp&lt;/code&gt; doesn&amp;rsquo;t handle conditionals.
-It&amp;rsquo;s also completely ignorant about loops and can&amp;rsquo;t actually call
-(nor define) functions.
-In a nutshell, there is &lt;strong&gt;no control flow&lt;/strong&gt; in &lt;code&gt;tiny-interp&lt;/code&gt;.
-Yet.&lt;/p&gt;
-
-&lt;p&gt;To properly implement &lt;strong&gt;function calls&lt;/strong&gt;, though, &lt;code&gt;tiny-interp&lt;/code&gt; will need
-to grow a new concept: activation records, also known as &lt;code&gt;Frames&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Stay tuned&amp;hellip;&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;em&gt;Update:&lt;/em&gt; correctly associate &lt;code&gt;Frames&lt;/code&gt; with function calls. Thanks to &lt;a href=&#34;https://www.reddit.com/user/munificent&#34;&gt;/u/munificent&lt;/a&gt;.&lt;/p&gt;
-</description>
+      <description>Last episode saw me slowly building up towards setting the case for a pygo interpreter: a python interpreter in Go.
+Still following the Python interpreter written in Python blueprints, let me first do (yet another!) little detour: let me build a tiny (python-like) interpreter.
+A Tiny Interpreter This tiny interpreter will understand three instructions:
+ LOAD_VALUE ADD_TWO_VALUES PRINT_ANSWER  As stated before, my interpreter doesn&amp;rsquo;t care about lexing, parsing nor compiling.</description>
     </item>
     
     <item>
@@ -265,111 +54,8 @@ to grow a new concept: activation records, also known as &lt;code&gt;Frames&lt;/
       <pubDate>Wed, 07 Sep 2016 10:37:07 +0200</pubDate>
       
       <guid>https://sbinet.github.io/posts/2016-09-07-start-interpreter/</guid>
-      <description>
-
-&lt;p&gt;In this series of posts, I&amp;rsquo;ll try to explain how one can write an interpreter
-in &lt;code&gt;Go&lt;/code&gt; and for &lt;code&gt;Go&lt;/code&gt;.
-If, like me, you lack a bit in terms of interpreters know-how, you should be
-in for a treat.&lt;/p&gt;
-
-&lt;h2 id=&#34;introduction:0017866e8944d87ddc4c4b8e47698f16&#34;&gt;Introduction&lt;/h2&gt;
-
-&lt;p&gt;&lt;code&gt;Go&lt;/code&gt; is starting to get traction in the science and data science communities.
-And, why not?
-&lt;code&gt;Go&lt;/code&gt; is fast to compile and run, is statically typed and thus presents a nice
-&amp;ldquo;edit/compile/run&amp;rdquo; development cycle.
-Moreover, a program written in &lt;code&gt;Go&lt;/code&gt; is easily deployable and cross-compilable
-on a variety of machines and operating systems.&lt;/p&gt;
-
-&lt;p&gt;&lt;code&gt;Go&lt;/code&gt; is also starting to have the foundation libraries for scientific work:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/gonum/blas&#34;&gt;gonum/blas&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/gonum/lapack&#34;&gt;gonum/lapack&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/gonum/integrate&#34;&gt;gonum/integrate&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/gonum/matrix&#34;&gt;gonum/matrix&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/gonum/optimize&#34;&gt;gonum/optimize&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/gonum/plot&#34;&gt;gonum/plot&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/gonum/stat&#34;&gt;gonum/stat&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;And the data science community is bootstrapping itself around the &lt;a href=&#34;https://github.com/gopherds&#34;&gt;gopherds&lt;/a&gt;
-community (slack channel: &lt;a href=&#34;https://gophers.slack.com/messages/data-science&#34;&gt;#data-science&lt;/a&gt;).&lt;/p&gt;
-
-&lt;p&gt;For data science, a central tool and workflow is the &lt;a href=&#34;https://jupyter.org&#34;&gt;Jupyter&lt;/a&gt; and its
-notebook.
-The Jupyter notebook provides a nice &amp;ldquo;REPL&amp;rdquo;-based workflow and the ability
-to share algorithms, plots and results.
-The REPL (Read-Eval-Print-Loop) allows people to engage fast exploratory
-work of someone&amp;rsquo;s data, quickly iterating over various algorithms or
-different ways to interpret data.
-For this kind of work, an interactive interpreter is paramount.&lt;/p&gt;
-
-&lt;p&gt;But &lt;code&gt;Go&lt;/code&gt; is compiled and even if the compilation is lightning fast, a true
-interpreter is needed to integrate well with a REPL-based workflow.&lt;/p&gt;
-
-&lt;p&gt;The &lt;a href=&#34;https://github.com/go-interpreter&#34;&gt;go-interpreter&lt;/a&gt; project (also available
-on Slack: &lt;a href=&#34;https://gophers.slack.com/messages/go-interpreter&#34;&gt;#go-interpreter&lt;/a&gt;)
-is starting to work on that: implement a &lt;code&gt;Go&lt;/code&gt; interpreter, in &lt;code&gt;Go&lt;/code&gt; and for &lt;code&gt;Go&lt;/code&gt;.
-The first step is to design a bit this beast: &lt;a href=&#34;https://github.com/go-interpreter/proposal/issues/1&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Before going there, let&amp;rsquo;s do a little detour: writing a (toy) interpreter
-in &lt;code&gt;Go&lt;/code&gt; for &lt;code&gt;Python&lt;/code&gt;.
-Why? you ask&amp;hellip;
-Well, there is a very nice article in the AOSA series:
-&lt;a href=&#34;http://www.aosabook.org/en/500L/a-python-interpreter-written-in-python.html&#34;&gt;A Python interpreter written in Python&lt;/a&gt;.
-I will use it as a guide to gain a bit of knowledge in writing interpreters.&lt;/p&gt;
-
-&lt;h2 id=&#34;pygo-a-toy-python-interpreter:0017866e8944d87ddc4c4b8e47698f16&#34;&gt;PyGo: A (toy) Python interpreter&lt;/h2&gt;
-
-&lt;p&gt;In the following, I&amp;rsquo;ll show how one can write a toy &lt;code&gt;Python&lt;/code&gt; interpreter in &lt;code&gt;Go&lt;/code&gt;.
-But first, let me define exactly what &lt;code&gt;pygo&lt;/code&gt; will do.
-&lt;code&gt;pygo&lt;/code&gt; won&amp;rsquo;t lex, parse nor compile &lt;code&gt;Python&lt;/code&gt; code.&lt;/p&gt;
-
-&lt;p&gt;No.
-&lt;code&gt;pygo&lt;/code&gt; will take directly the already compiled bytecode, produced with a
-&lt;code&gt;python3&lt;/code&gt; program, and then interpret the bytecode instructions:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-sh&#34;&gt;shell&amp;gt; python3 -m compileall -l my-file.py
-shell&amp;gt; pygo ./__pycache__/my-file.cpython-35.pyc
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;pygo&lt;/code&gt; will be a simple &lt;em&gt;bytecode interpreter&lt;/em&gt;, with a main loop fetching
-bytecode instructions and then executing them.
-In pseudo &lt;code&gt;Go&lt;/code&gt; code:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-go&#34;&gt;func run(instructions []instruction) {
-	for _, instruction := range instructions {
-		switch inst := instruction.(type) {
-			case opADD:
-				// perform a+b
-			case opPRINT:
-				// print values
-			// ...
-		}
-	}
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;code&gt;pygo&lt;/code&gt; will export a few types to implement such an interpreter:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;a virtual machine &lt;code&gt;pygo.VM&lt;/code&gt; that will hold the call stack of frames
-and manage the execution of instructions inside the context of these frames,&lt;/li&gt;
-&lt;li&gt;a &lt;code&gt;pygo.Frame&lt;/code&gt; type to hold informations about the stack (globals, locals,
-functions&amp;rsquo; code, &amp;hellip;),&lt;/li&gt;
-&lt;li&gt;a &lt;code&gt;pygo.Block&lt;/code&gt; type to handle the control flow (&lt;code&gt;if&lt;/code&gt;, &lt;code&gt;else&lt;/code&gt;, &lt;code&gt;return&lt;/code&gt;,
-&lt;code&gt;continue&lt;/code&gt;, &lt;em&gt;etc&lt;/em&gt;&amp;hellip;),&lt;/li&gt;
-&lt;li&gt;a &lt;code&gt;pygo.Instruction&lt;/code&gt; type to model opcodes (&lt;code&gt;ADD&lt;/code&gt;, &lt;code&gt;LOAD_FAST&lt;/code&gt;, &lt;code&gt;PRINT&lt;/code&gt;, &amp;hellip;)
-and their arguments (if any).&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Ok.
-That&amp;rsquo;s enough for today.
-Stay tuned&amp;hellip;&lt;/p&gt;
-
-&lt;p&gt;In the meantime, I recommend reading the &lt;a href=&#34;http://www.aosabook.org/en/500L/a-python-interpreter-written-in-python.html&#34;&gt;AOSA article&lt;/a&gt;.&lt;/p&gt;
-</description>
+      <description>In this series of posts, I&amp;rsquo;ll try to explain how one can write an interpreter in Go and for Go. If, like me, you lack a bit in terms of interpreters know-how, you should be in for a treat.
+Introduction Go is starting to get traction in the science and data science communities. And, why not? Go is fast to compile and run, is statically typed and thus presents a nice &amp;ldquo;edit/compile/run&amp;rdquo; development cycle.</description>
     </item>
     
   </channel>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Statistics on 0xb1ns&gt;&gt; go run</title>
+    <link>https://sbinet.github.io/categories/statistics/</link>
+    <description>Recent content in Statistics on 0xb1ns&gt;&gt; go run</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Wed, 04 Oct 2017 11:17:11 +0200</lastBuildDate>
+    
+	<atom:link href="https://sbinet.github.io/categories/statistics/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Introduction to Statistics With Gonum</title>
+      <link>https://sbinet.github.io/posts/2017-10-04-intro-to-stats-with-gonum/</link>
+      <pubDate>Wed, 04 Oct 2017 11:17:11 +0200</pubDate>
+      
+      <guid>https://sbinet.github.io/posts/2017-10-04-intro-to-stats-with-gonum/</guid>
+      <description>Starting a bit of a new series (hopefully with more posts than with the interpreter ones) about using Gonum to apply statistics.
+This first post is really just a copy-paste of this one:
+https://mubaris.com/2017-09-09/introduction-to-statistics-using-numpy
+but using Go and Gonum instead of Python and numpy.
+Go &amp;amp; Gonum Gonum is &amp;ldquo;a set of packages designed to make writing numeric and scientific algorithms productive, performant and scalable.&amp;rdquo;
+Before being able to use Gonum, we need to install Go.</description>
+    </item>
+    
+  </channel>
+</rss>

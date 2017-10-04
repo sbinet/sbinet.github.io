@@ -7,7 +7,7 @@
 
     <meta name="description" content="A tiny interpreter">
 
-    <meta name="generator" content="Hugo 0.15-DEV" />
+    <meta name="generator" content="Hugo 0.29-DEV" />
     <meta name="twitter:card" content="summary">
     
     <meta name="twitter:title" content="A tiny python-like interpreter &middot; 0xb1ns&gt;&gt; go run">
@@ -88,7 +88,7 @@ a <code>pygo</code> interpreter: a <code>python</code> interpreter in <code>Go</
 blueprints, let me first do (yet another!) little detour:
 let me build a tiny (<code>python</code>-like) interpreter.</p>
 
-<h2 id="a-tiny-interpreter:bd97c1c6a5a23ee89e5e65c28de4f6b3">A Tiny Interpreter</h2>
+<h2 id="a-tiny-interpreter">A Tiny Interpreter</h2>
 
 <p>This tiny interpreter will understand three instructions:</p>
 
@@ -198,7 +198,7 @@ That&rsquo;s done in the <code>Run(code Code)</code> method:</p>
 
 <p>The full code is here: <a href="https://github.com/sbinet/pygo/blob/4938a159499724011a7175a4f344560372ccd468/cmd/tiny-interp/main.go">github.com/sbinet/pygo/cmd/tiny-interp</a>.</p>
 
-<h2 id="variables:bd97c1c6a5a23ee89e5e65c28de4f6b3">Variables</h2>
+<h2 id="variables">Variables</h2>
 
 <p>The <code>AOSA</code> article sharply notices that, even though this <code>tiny-interp</code> interpreter
 is quite limited, its overall architecture and <em>modus operandi</em> are quite comparable
@@ -292,7 +292,7 @@ load the value (push it on the stack) associated with the current variable.</p>
 
 <p>The complete code is here: <a href="https://github.com/sbinet/pygo/blob/79e9815cafa9c32e898141858502931acb3daf05/cmd/tiny-interp/main.go">github.com/sbinet/pygo/cmd/tiny-interp</a></p>
 
-<h2 id="control-flow-function-calls:bd97c1c6a5a23ee89e5e65c28de4f6b3">Control flow &amp;&amp; function calls</h2>
+<h2 id="control-flow-function-calls">Control flow &amp;&amp; function calls</h2>
 
 <p><code>tiny-interp</code> is already quite great.
 I think.
