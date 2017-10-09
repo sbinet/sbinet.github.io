@@ -3,18 +3,18 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gonum &middot; 0xb1ns&gt;&gt; go run</title>
+    <title>Minimization &middot; 0xb1ns&gt;&gt; go run</title>
 
     <meta name="description" content="Digital ramblings of a french gopher">
 
     <meta name="generator" content="Hugo 0.29-DEV" />
     <meta name="twitter:card" content="summary">
     
-    <meta name="twitter:title" content="Gonum &middot; 0xb1ns&gt;&gt; go run">
+    <meta name="twitter:title" content="Minimization &middot; 0xb1ns&gt;&gt; go run">
     <meta name="twitter:description" content="Digital ramblings of a french gopher">
 
     <meta property="og:type" content="article">
-    <meta property="og:title" content="Gonum &middot; 0xb1ns&gt;&gt; go run">
+    <meta property="og:title" content="Minimization &middot; 0xb1ns&gt;&gt; go run">
     <meta property="og:description" content="Digital ramblings of a french gopher">
 
     <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Oxygen:400,700' rel='stylesheet' type='text/css'>
@@ -335,212 +335,6 @@ The error on the <code>i-th</code> parameter is then:</p>
 <p>Next time, we&rsquo;ll analyse a LEP data sample and use <code>gonum/optimize</code> to estimate a physics quantity.</p>
 
 <p><em>NB:</em> the material and orignal data for this blog post has been extracted from: <a href="http://www.desy.de/~rosem/flc_statistics/data/04_parameters_estimation-C.pdf">http://www.desy.de/~rosem/flc_statistics/data/04_parameters_estimation-C.pdf</a>.</p>
-
-                    </div>
-                </section>
-                
-                <h1 class="content-subhead">04 Oct 2017, 11:17</h1>
-                <section class="post">
-                    <header class="post-header">
-
-                        <a href="https://sbinet.github.io/posts/2017-10-04-intro-to-stats-with-gonum/" class="post-title">Introduction to Statistics With Gonum</a>
-
-                        <p class="post-meta">
-                            
-                            
-                                under 
-                                
-                                <a class="post-category post-category-go" href="https://sbinet.github.io/categories/go">go</a><a class="post-category post-category-gonum" href="https://sbinet.github.io/categories/gonum">gonum</a><a class="post-category post-category-statistics" href="https://sbinet.github.io/categories/statistics">statistics</a>
-                            
-                        </p>
-                    </header>
-
-                    <div class="post-description">
-                        
-
-<p>Starting a bit of a new series (hopefully with more posts than with the interpreter ones) about using <a href="https://gonum.org">Gonum</a> to apply statistics.</p>
-
-<p>This first post is really just a copy-paste of this one:</p>
-
-<p><a href="https://mubaris.com/2017-09-09/introduction-to-statistics-using-numpy">https://mubaris.com/2017-09-09/introduction-to-statistics-using-numpy</a></p>
-
-<p>but using <a href="https://golang.org">Go</a> and <a href="https://gonum.org">Gonum</a> instead of Python and <code>numpy</code>.</p>
-
-<h1 id="go-gonum">Go &amp; Gonum</h1>
-
-<p><a href="https://gonum.org">Gonum</a> is <em>&ldquo;a set of packages designed to make writing numeric and scientific algorithms productive, performant and scalable.&rdquo;</em></p>
-
-<p>Before being able to use <code>Gonum</code>, we need to install <a href="https://golang.org">Go</a>.
-We can download and install the <code>Go</code> toolchain for a variety of platforms and operating systems from <a href="https://golang.org/dl">golang.org/dl</a>.</p>
-
-<p>Once that has been done, installing <code>Gonum</code> and all its dependencies can be done with:</p>
-
-<pre><code class="language-sh">$&gt; go get gonum.org/v1/gonum/...
-</code></pre>
-
-<p>If you had a previous installation of <code>Gonum</code>, you can re-install it and update it to the latest one like so:</p>
-
-<pre><code class="language-sh">$&gt; go get -u gonum.org/v1/gonum/...
-</code></pre>
-
-<h1 id="gonum-and-statistics">Gonum and statistics</h1>
-
-<p>Gonum provides many statistical functions.
-Let&rsquo;s use it to calculate the mean, median, standard deviation and variance of a small dataset.</p>
-
-<pre><code class="language-go">// file: stats.go
-
-package main
-
-import (
-	&quot;fmt&quot;
-	&quot;math&quot;
-	&quot;sort&quot;
-
-	&quot;gonum.org/v1/gonum/stat&quot;
-)
-
-func main() {
-	xs := []float64{
-		32.32, 56.98, 21.52, 44.32,
-		55.63, 13.75, 43.47, 43.34,
-		12.34,
-	}
-
-	fmt.Printf(&quot;data: %v\n&quot;, xs)
-
-	sort.Float64s(xs)
-	fmt.Printf(&quot;data: %v (sorted)\n&quot;, xs)
-
-	// computes the weighted mean of the dataset.
-	// we don't have any weights (ie: all weights are 1)
-	// so we just pass a nil slice.
-	mean := stat.Mean(xs, nil)
-
-	// computes the median of the dataset.
-	// here as well, we pass a nil slice as weights.
-	median := stat.Quantile(0.5, stat.Empirical, xs, nil)
-
-	variance := stat.Variance(xs, nil)
-	stddev := math.Sqrt(variance)
-
-	fmt.Printf(&quot;mean=     %v\n&quot;, mean)
-	fmt.Printf(&quot;median=   %v\n&quot;, median)
-	fmt.Printf(&quot;variance= %v\n&quot;, variance)
-	fmt.Printf(&quot;std-dev=  %v\n&quot;, stddev)
-}
-</code></pre>
-
-<p>The program above performs some rather basic statistical operations on our dataset:</p>
-
-<pre><code class="language-sh">$&gt; go run stats.go
-data: [32.32 56.98 21.52 44.32 55.63 13.75 43.47 43.34 12.34]
-data: [12.34 13.75 21.52 32.32 43.34 43.47 44.32 55.63 56.98] (sorted)
-mean=     35.96333333333334
-median=   43.34
-variance= 285.306875
-std-dev=  16.891029423927957
-</code></pre>
-
-<p>The astute reader will no doubt notice that the variance value displayed here
-differs from the one obtained with <code>numpy.var</code>:</p>
-
-<pre><code class="language-python">&gt;&gt;&gt; xs=[32.32, 56.98, 21.52, 44.32, 55.63, 13.75, 43.47, 43.34, 12.34]
-&gt;&gt;&gt; xs.sort()
-&gt;&gt;&gt; np.mean(xs)
-35.963333333333338
-&gt;&gt;&gt; np.median(xs)
-43.340000000000003
-&gt;&gt;&gt; np.var(xs)
-253.60611111111109
-&gt;&gt;&gt; np.std(xs)
-15.925015262507948
-</code></pre>
-
-<p>This is because <code>numpy.var</code> uses <code>len(xs)</code> as the divisor while <code>gonum/stats</code>
-uses the unbiased sample variance (<em>ie:</em> the divisor is <code>len(xs)-1</code>):</p>
-
-<pre><code class="language-python">&gt;&gt;&gt; np.var(xs, ddof=1)
-285.30687499999999
-&gt;&gt;&gt; np.std(x, ddof=1)
-16.891029423927957
-</code></pre>
-
-<p>With this quite blunt tool, we can analyse some real data from real life.
-We will use a dataset pertaining to the salary of European developers, all 1147 of them :).
-We have this dataset in a file named <code>salary.txt</code>.</p>
-
-<pre><code class="language-go">// file: stats-salary.go
-
-package main
-
-import (
-	&quot;bufio&quot;
-	&quot;fmt&quot;
-	&quot;log&quot;
-	&quot;math&quot;
-	&quot;os&quot;
-	&quot;sort&quot;
-
-	&quot;gonum.org/v1/gonum/stat&quot;
-)
-
-func main() {
-	f, err := os.Open(&quot;salary.txt&quot;)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer f.Close()
-
-	var xs []float64
-	scan := bufio.NewScanner(f)
-	for scan.Scan() {
-		var v float64
-		txt := scan.Text()
-		_, err = fmt.Sscanf(txt, &quot;%f&quot;, &amp;v)
-		if err != nil {
-			log.Fatalf(
-				&quot;could not convert to float64 %q: %v&quot;,
-				txt, err,
-			)
-		}
-		xs = append(xs, v)
-	}
-
-	// make sure scanning the file and extracting values
-	// went fine, without any error.
-	if err = scan.Err(); err != nil {
-		log.Fatalf(&quot;error scanning file: %v&quot;, err)
-	}
-
-	fmt.Printf(&quot;data sample size: %v\n&quot;, len(xs))
-
-	sort.Float64s(xs)
-
-	mean := stat.Mean(xs, nil)
-	median := stat.Quantile(0.5, stat.Empirical, xs, nil)
-	variance := stat.Variance(xs, nil)
-	stddev := math.Sqrt(variance)
-
-	fmt.Printf(&quot;mean=     %v\n&quot;, mean)
-	fmt.Printf(&quot;median=   %v\n&quot;, median)
-	fmt.Printf(&quot;variance= %v\n&quot;, variance)
-	fmt.Printf(&quot;std-dev=  %v\n&quot;, stddev)
-}
-</code></pre>
-
-<p>And here is the output:</p>
-
-<pre><code>$&gt; go run ./stats-salary.go
-data sample size: 1147
-mean=     55894.53879686138
-median=   48000
-variance= 3.0464263289031615e+09
-std-dev=  55194.44110508921
-</code></pre>
-
-<p>The data file can be obtained from here: <a href="https://sbinet.github.io/code/2017-10-04/salary.txt">salary.txt</a>
-together with a much more detailed one there: <a href="https://sbinet.github.io/code/2017-10-04/salary.csv">salary.csv</a>.</p>
 
                     </div>
                 </section>

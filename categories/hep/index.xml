@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Hep on 0xb1ns&gt;&gt; go run</title>
+    <link>https://sbinet.github.io/categories/hep/</link>
+    <description>Recent content in Hep on 0xb1ns&gt;&gt; go run</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Mon, 09 Oct 2017 11:11:11 +0200</lastBuildDate>
+    
+	<atom:link href="https://sbinet.github.io/categories/hep/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Introduction to Minimization with Gonum</title>
+      <link>https://sbinet.github.io/posts/2017-10-09-intro-to-minimization/</link>
+      <pubDate>Mon, 09 Oct 2017 11:11:11 +0200</pubDate>
+      
+      <guid>https://sbinet.github.io/posts/2017-10-09-intro-to-minimization/</guid>
+      <description>Switching gears a bit with regard to last week, let&amp;rsquo;s investigate how to perform minimization with Gonum.
+In High Energy Physics, there is a program to calculate numerically:
+ a function minimum of F(a) of parameters a_i (with up to 50 parameters), the covariance matrix of these parameters the (asymmetric or parabolic) errors of the parameters from F_min+∆ for arbitrary ∆ the contours of parameter pairs a_i,a_j.  This program is called MINUIT and was originally written by Fred JAMES in FORTRAN.</description>
+    </item>
+    
+  </channel>
+</rss>
