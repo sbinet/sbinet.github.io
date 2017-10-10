@@ -157,6 +157,21 @@ fmt.Printf(&quot;µ-err= %v\n&quot;, merr)
 
 <h2 id="with-minuit">With <code>MINUIT</code></h2>
 
+<p>From the plot above and from first principles, we can assume a Poisson distribution.
+The Poisson probability is:</p>
+
+<pre><code class="language-latex">P(n|\mu) = \mu^{n} / n! * e^{-\mu}
+</code></pre>
+
+<p>This therefore leads to a log-likelihood of:</p>
+
+<pre><code class="language-latex">ln L(\mu) = n ln(\mu) - ln(n!) - \mu
+</code></pre>
+
+<p>which is the quantity we&rsquo;ll try to optimize.</p>
+
+<p>In <code>C++</code>, this would look like:</p>
+
 <pre><code class="language-c++">#include &lt;math.h&gt;
 #include &lt;cstdio&gt;
 #include &quot;TMinuit.h&quot;
@@ -182,7 +197,7 @@ int main(int argc, char **argv) {
 	double arglist[10];
 	int ierflg = 0;
 
-	double start = 1.0; // initial value for the mean
+	double start = 1.0; // initial value for mu
 	double step = 0.1;
 	double l_bnd = 0.1;
 	double u_bnd = 10.;
