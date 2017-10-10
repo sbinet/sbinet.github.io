@@ -124,6 +124,8 @@ fmt.Printf(&quot;µ-err= %v\n&quot;, merr)
 <p>Let&rsquo;s plot the data:</p>
 
 <pre><code class="language-go">func plot(rs []float64) {
+	mean := stat.Mean(rs, nil)
+
 	// hbook is go-hep.org/x/hep/hbook.
 	// here we create a 1-dim histogram with 10 bins,
 	// from 0 to 10.
@@ -131,6 +133,7 @@ fmt.Printf(&quot;µ-err= %v\n&quot;, merr)
 	for _, x := range rs {
 		h.Fill(x, 1)
 	}
+	h.Scale(1 / h.Integral())
 
 	// hplot is a convenience package built on top
 	// of gonum.org/v1/plot.
@@ -140,6 +143,10 @@ fmt.Printf(&quot;µ-err= %v\n&quot;, merr)
 	hh := hplot.NewH1D(h)
 	hh.FillColor = color.RGBA{255, 0, 0, 255}
 	p.Add(hh)
+
+	fct := hplot.NewFunction(distuv.Poisson{Lambda: mean}.Prob)
+	fct.Color = color.RGBA{0, 0, 255, 255}
+	p.Add(fct)
 	p.Add(hplot.NewGrid())
 
 	err := p.Save(10*vg.Centimeter, -1, &quot;plot.png&quot;)
