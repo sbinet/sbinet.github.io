@@ -203,11 +203,23 @@ int main(int argc, char **argv) {
 
 	TMinuit minuit(1);
 	minuit.SetFCN(fcn);
-	minuit.mnparm(0, &quot;Poisson mu&quot;, start, step, l_bnd, u_bnd, ierflg);
+	minuit.mnparm(
+		0, &quot;Poisson mu&quot;,
+		start, step,
+		l_bnd, u_bnd, ierflg
+	);
 
+	// set a 1-sigma error for the log-likelihood
 	arglist[0] = 0.5;
 	minuit.mnexcm(&quot;SET ERR&quot;,arglist,1,ierflg);
+
+	// search for minimum.
+	// computes covariance matrix and computes parabolic
+	// errors for all parameters.
 	minuit.mnexcm(&quot;MIGRAD&quot;,arglist,0,ierflg);
+
+	// calculates exact, asymmetric errors for all
+	// variable parameters.
 	minuit.mnexcm(&quot;MINOS&quot;,arglist,0,ierflg);
 
 	arglist[0] = 2.0;
@@ -286,7 +298,7 @@ Correlation matrix:
 		Hess: hess,
 	}
 
-	var method optimize.Method = &amp;optimize.Newton{}
+	var meth = &amp;optimize.Newton{}
 	var p0 = []float64{1} // initial value for mu
 
 	res, err := optimize.Local(p, p0, nil, method)
@@ -323,7 +335,7 @@ Yeah!</p>
 <p><code>gonum/optimize</code> doesn&rsquo;t try to automatically numerically compute the first- and second-derivative of an objective function (<code>MINUIT</code> does.)
 But using <a href="https://godoc.org/gonum.org/v1/gonum/diff/fd">gonum/diff/fd</a>, it&rsquo;s rather easy to provide it to <code>gonum/optimize</code>.</p>
 
-<p><code>gonum/optimize.Result</code> only exposes (through <code>gonum/optimize.Location</code>):</p>
+<p><code>gonum/optimize.Result</code> only exposes the following informations (through <code>gonum/optimize.Location</code>):</p>
 
 <pre><code class="language-go">// Location represents a location in the optimization procedure.
 type Location struct {
