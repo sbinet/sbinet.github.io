@@ -5,10 +5,23 @@
     <link>https://sbinet.github.io/</link>
     <description>Recent content on 0xb1ns&gt;&gt; go run</description>
     <generator>Hugo -- gohugo.io</generator>
-    <lastBuildDate>Mon, 09 Oct 2017 11:11:11 +0200</lastBuildDate>
+    <lastBuildDate>Tue, 10 Oct 2017 11:07:29 +0200</lastBuildDate>
     
 	<atom:link href="https://sbinet.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>L3 LEP data</title>
+      <link>https://sbinet.github.io/posts/2017-10-10-lep-data-minimization/</link>
+      <pubDate>Tue, 10 Oct 2017 11:07:29 +0200</pubDate>
+      
+      <guid>https://sbinet.github.io/posts/2017-10-10-lep-data-minimization/</guid>
+      <description>Still working our way through this tutorial based on C++ and MINUIT:
+http://www.desy.de/~rosem/flc_statistics/data/04_parameters_estimation-C.pdf
+Now, we tackle the L3 LEP data. L3 was an experiment at the Large Electron Positron collider, at CERN, near Geneva. Until 2000, it recorded the decay products of e+e- collisions at center of mass energies up to 208 GeV.
+An example is the muon pair production:
+ e+e- -&amp;gt; mu+mu-  Both muons are mainly detected and reconstructed from the tracking system.</description>
+    </item>
     
     <item>
       <title>Introduction to Minimization with Gonum</title>

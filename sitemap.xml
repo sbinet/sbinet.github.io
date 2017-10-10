@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://sbinet.github.io/posts/2017-10-10-lep-data-minimization/</loc>
+    <lastmod>2017-10-10T11:07:29+02:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://sbinet.github.io/posts/2017-10-09-intro-to-minimization/</loc>
     <lastmod>2017-10-09T11:11:11+02:00</lastmod>
   </url>
@@ -34,7 +39,7 @@
   
   <url>
     <loc>https://sbinet.github.io/</loc>
-    <lastmod>2017-10-09T11:11:11+02:00</lastmod>
+    <lastmod>2017-10-10T11:07:29+02:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -45,19 +50,19 @@
   
   <url>
     <loc>https://sbinet.github.io/categories/go/</loc>
-    <lastmod>2017-10-09T11:11:11+02:00</lastmod>
+    <lastmod>2017-10-10T11:07:29+02:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://sbinet.github.io/categories/gonum/</loc>
-    <lastmod>2017-10-09T11:11:11+02:00</lastmod>
+    <lastmod>2017-10-10T11:07:29+02:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://sbinet.github.io/categories/hep/</loc>
-    <lastmod>2017-10-09T11:11:11+02:00</lastmod>
+    <lastmod>2017-10-10T11:07:29+02:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -69,19 +74,19 @@
   
   <url>
     <loc>https://sbinet.github.io/categories/minimization/</loc>
-    <lastmod>2017-10-09T11:11:11+02:00</lastmod>
+    <lastmod>2017-10-10T11:07:29+02:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://sbinet.github.io/categories/minuit/</loc>
-    <lastmod>2017-10-09T11:11:11+02:00</lastmod>
+    <lastmod>2017-10-10T11:07:29+02:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://sbinet.github.io/posts/</loc>
-    <lastmod>2017-10-09T11:11:11+02:00</lastmod>
+    <lastmod>2017-10-10T11:07:29+02:00</lastmod>
     <priority>0</priority>
   </url>
   
