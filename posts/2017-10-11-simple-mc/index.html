@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Monte Carlo with Gonum and Go-HEP &middot; 0xb1ns&gt;&gt; go run</title>
+
+    <meta name="description" content="">
+
+    <meta name="generator" content="Hugo 0.29-DEV" />
+    <meta name="twitter:card" content="summary">
+    
+    <meta name="twitter:title" content="Simple Monte Carlo with Gonum and Go-HEP &middot; 0xb1ns&gt;&gt; go run">
+    <meta name="twitter:description" content="">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Simple Monte Carlo with Gonum and Go-HEP &middot; 0xb1ns&gt;&gt; go run">
+    <meta property="og:description" content="">
+
+    <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Oxygen:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/pure-min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/pure/0.6.0/grids-responsive-min.css">
+
+    <link rel="stylesheet" href="https://sbinet.github.io/css/all.min.css">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <link rel="alternate" type="application/rss+xml" title="0xb1ns&gt;&gt; go run" href="https://sbinet.github.io/index.xml" />
+</head>
+<body>
+
+
+<div id="layout" class="pure-g">
+    <div class="sidebar pure-u-1 pure-u-md-1-4">
+    <div class="header">
+        <hgroup>
+            <h1 class="brand-title"><a href="https://sbinet.github.io">0xb1ns&gt;&gt; go run</a></h1>
+            <h2 class="brand-tagline"> Digital ramblings of a french gopher </h2>
+        </hgroup>
+
+        <nav class="nav">
+            <ul class="nav-list">
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://twitter.com/0xb1ns"><i class="fa fa-twitter"></i> Twitter</a>
+                </li>
+                
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://github.com/sbinet "><i class="fa fa-github-alt"></i> github</a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="pure-button" href="https://sbinet.github.io/index.xml"><i class="fa fa-rss"></i> rss</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+
+    <div class="content pure-u-1 pure-u-md-3-4">
+        <div>
+            
+            <div class="posts">
+                <h1 class="content-subhead">11 Oct 2017</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://sbinet.github.io/posts/2017-10-11-simple-mc/" class="post-title">Simple Monte Carlo with Gonum and Go-HEP</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                under 
+                                
+                                <a class="post-category post-category-go" href="https://sbinet.github.io/categories/go">go</a><a class="post-category post-category-gonum" href="https://sbinet.github.io/categories/gonum">gonum</a><a class="post-category post-category-go-hep" href="https://sbinet.github.io/categories/go-hep">go-hep</a><a class="post-category post-category-HEP" href="https://sbinet.github.io/categories/hep">HEP</a><a class="post-category post-category-Monte Carlo" href="https://sbinet.github.io/categories/monte-carlo">Monte Carlo</a>
+                            
+                        </p>
+                    </header>
+                    
+                    <div class="post-description">
+                        
+
+<p>Today, we&rsquo;ll investigate the Monte Carlo method.
+<a href="https://en.wikipedia.org/wiki/Monte_Carlo_method">Wikipedia</a>, the ultimate source of truth in the (known) universe has this to say about Monte Carlo:</p>
+
+<p><em>Monte Carlo methods (or Monte Carlo experiments) are a broad class of computational algorithms that rely on repeated random sampling to obtain numerical results. [&hellip;]</em>
+ <em>Monte Carlo methods are mainly used in three distinct problem classes: optimization, numerical integration, and generating draws from a probability distribution.</em></p>
+
+<p>In other words, the Monte Carlo method is a numerical technique using random numbers:</p>
+
+<ul>
+<li>Monte Carlo integration to estimate the value of an integral:
+
+<ul>
+<li>take the function value at random points</li>
+<li>the area (or volume) times the average function value estimates the integral</li>
+</ul></li>
+<li>Monte Carlo simulation to predict an expected measurement.
+
+<ul>
+<li>an experimental measurement is split into a sequence of random processes</li>
+<li>use random numbers to decide which processes happen</li>
+<li>tabulate the values to estimate the expected probability density function (PDF) for the experiment.</li>
+</ul></li>
+</ul>
+
+<p>Before being able to write a High Energy Physics detector simulation (like <a href="http://geant4.cern.ch">Geant4</a>, <a href="https://cp3.irmp.ucl.ac.be/projects/delphes">Delphes</a> or <a href="https://go-hep.org/x/hep/fads">fads</a>), we need to know how to generate random numbers, in Go.</p>
+
+<h2 id="generating-random-numbers">Generating random numbers</h2>
+
+<p>The Go standard library provides the building blocks for implementing Monte Carlo techniques, via the <a href="https://godoc.org/math/rand">math/rand</a> package.</p>
+
+<p><code>math/rand</code> exposes the <a href="https://godoc.org/math/rand#Rand">rand.Rand</a> type, a source of (pseudo) random numbers.
+With <code>rand.Rand</code>, one can:</p>
+
+<ul>
+<li>generate random numbers following a flat, uniform distribution between <code>[0, 1)</code> with <code>Float32()</code> or <code>Float64()</code>;</li>
+<li>generate random numbers following a standard normal distribution (of mean 0 and standard deviation 1) with <code>NormFloat64()</code>;</li>
+<li>and generate random numbers following an exponential distribution with <code>ExpFloat64</code>.</li>
+</ul>
+
+<p>If you need other distributions, have a look at Gonum&rsquo;s <a href="https://godoc.org/gonum.org/v1/gonum/stat/distuv">gonum/stat/distuv</a>.</p>
+
+<p><code>math/rand</code> exposes convenience functions (<code>Float32</code>, <code>Float64</code>, <code>ExpFloat64</code>, &hellip;) that share a global <code>rand.Rand</code> value, the &ldquo;default&rdquo; source of (pseudo) random numbers.
+These convenience functions are safe to be used from multiple goroutines concurrently, but this may generate lock contention.
+It&rsquo;s probably a good idea in your libraries to not rely on these convenience functions and instead provide a way to use local <code>rand.Rand</code> values, especially if you want to be able to change the seed of these <code>rand.Rand</code> values.</p>
+
+<p>Let&rsquo;s see how we can generate random numbers with <code>&quot;math/rand&quot;</code>:</p>
+
+<pre><code class="language-go">func main() {
+	const seed = 12345
+	src := rand.NewSource(seed)
+	rnd := rand.New(src)
+
+	const N = 10
+	for i := 0; i &lt; N; i++ {
+		r := rnd.Float64() // r is in [0.0, 1.0)
+		fmt.Printf(&quot;%v\n&quot;, r)
+	}
+}
+</code></pre>
+
+<p>Running this program gives:</p>
+
+<pre><code class="language-sh">$&gt; go run ./mc.go
+0.8487305991992138
+0.6451080292174168
+0.7382079884862905
+0.31522206779732853
+0.057001989921077224
+0.9672449323010088
+0.6139541710075446
+0.01505990819189991
+0.13361969083044145
+0.5118319569473198
+</code></pre>
+
+<p>OK. Does this seem flat to you?
+Not sure&hellip;</p>
+
+<p>Let&rsquo;s modify our program to better visualize the random data.
+We&rsquo;ll use a histogram and the <a href="https://go-hep.org/x/hep/hbook">go-hep.org/x/hep/hbook</a> and <a href="https://go-hep.org/x/hep/hplot">go-hep.org/x/hep/hplot</a> packages to (respectively) create histograms and display them.</p>
+
+<p><em>Note:</em> <code>hplot</code> is package built on top of the <a href="https://godoc.org/gonum.org/v1/plot">gonum.org/v1/plot</a> package, but with a few HEP-oriented customization.
+You can use <code>gonum.org/v1/plot</code> directly if you so choose or prefer.</p>
+
+<pre><code class="language-go">func main() {
+	const seed = 12345
+	src := rand.NewSource(seed)
+	rnd := rand.New(src)
+
+	const N = 10000
+
+	huni := hbook.NewH1D(100, 0, 1.0)
+
+	for i := 0; i &lt; N; i++ {
+		r := rnd.Float64() // r is in [0.0, 1.0)
+		huni.Fill(r, 1)
+	}
+
+	plot(huni, &quot;uniform.png&quot;)
+}
+</code></pre>
+
+<p>We&rsquo;ve increased the number of random numbers to generate to get a better idea of how the random number generator behaves, and disabled the printing of the values.</p>
+
+<p>We first create a 1-dimensional histogram <code>huni</code> with 100 bins from 0 to 1.
+Then we fill it with the value <code>r</code> and an associated weight (here, the weight is just <code>1</code>.)</p>
+
+<p>Finally, we just plot (or rather, save) the histogram into the file <code>&quot;uniform.png&quot;</code> with the <code>plot(...)</code> function:</p>
+
+<pre><code class="language-go">func plot(h *hbook.H1D, fname string) {
+	p := hplot.New()
+	hh := hplot.NewH1D(h)
+	hh.Color = color.NRGBA{0, 0, 255, 255}
+	p.Add(hh, hplot.NewGrid())
+
+	err := p.Save(10*vg.Centimeter, -1, fname)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+</code></pre>
+
+<p>Running the code creates a <code>uniform.png</code> file:</p>
+
+<pre><code class="language-sh">$&gt; go run ./mc.go
+</code></pre>
+
+<p><img src="https://sbinet.github.io/code/2017-10-11/uniform.png" alt="plot-uniform" /></p>
+
+<p>Indeed, that looks rather flat.</p>
+
+<p>So far, so good.
+Let&rsquo;s add a new distribution: the standard normal distribution.</p>
+
+<pre><code class="language-go">func main() {
+	const seed = 12345
+	src := rand.NewSource(seed)
+	rnd := rand.New(src)
+
+	const N = 10000
+
+	huni := hbook.NewH1D(100, 0, 1.0)
+	hgauss := hbook.NewH1D(100, -5, 5)
+
+	for i := 0; i &lt; N; i++ {
+		r := rnd.Float64() // r is in [0.0, 1.0)
+		huni.Fill(r, 1)
+
+		g := rnd.NormFloat64()
+		hgauss.Fill(g, 1)
+	}
+
+	plot(huni, &quot;uniform.png&quot;)
+	plot(hgauss, &quot;norm.png&quot;)
+}
+</code></pre>
+
+<p>Running the code creates the following new plot:</p>
+
+<p><img src="https://sbinet.github.io/code/2017-10-11/norm.png" alt="plot-norm" /></p>
+
+<p>Note that this has slightly changed the previous <code>&quot;uniform.png&quot;</code> plot: we are sharing the source of random numbers between the 2 histograms.
+The sequence of random numbers is exactly the same than before (<em>modulo</em> the fact that now we generate -at least- twice the number than previously) but they are not associated to the same histograms.</p>
+
+<p>OK, this does generate a gaussian.
+But what if we want to generate a gaussian with a mean other than <code>0</code> and/or a standard deviation other than <code>1</code> ?</p>
+
+<p>The <a href="https://godoc.org/math/rand#NormFloat64">math/rand.NormFloat64</a> documentation kindly tells us how to achieve this:</p>
+
+<p><em>&ldquo;To produce a different normal distribution, callers can adjust the output using:
+  <code>sample = NormFloat64() * desiredStdDev + desiredMean</code>
+  &ldquo;</em></p>
+
+<p>Let&rsquo;s try to generate a gaussian of mean <code>10</code> and standard deviation <code>2</code>.
+We&rsquo;ll have to change a bit the definition of our histogram:</p>
+
+<pre><code class="language-go">func main() {
+	const seed = 12345
+	src := rand.NewSource(seed)
+	rnd := rand.New(src)
+
+	const (
+		N      = 10000
+		mean   = 10.0
+		stddev = 5.0
+	)
+
+	huni := hbook.NewH1D(100, 0, 1.0)
+	hgauss := hbook.NewH1D(100, -10, 30)
+
+	for i := 0; i &lt; N; i++ {
+		r := rnd.Float64() // r is in [0.0, 1.0)
+		huni.Fill(r, 1)
+
+		g := mean + stddev*rnd.NormFloat64()
+		hgauss.Fill(g, 1)
+	}
+
+	plot(huni, &quot;uniform.png&quot;)
+	plot(hgauss, &quot;gauss.png&quot;)
+
+	fmt.Printf(&quot;gauss: mean=    %v\n&quot;, hgauss.XMean())
+	fmt.Printf(&quot;gauss: std-dev= %v +/- %v\n&quot;, hgauss.XStdDev(), hgauss.XStdErr())
+}
+</code></pre>
+
+<p>Running the program gives:</p>
+
+<pre><code class="language-sh">$&gt; go run mc.go
+gauss: mean=    10.105225624460644
+gauss: std-dev= 5.048629091912316 +/- 0.05048629091912316
+</code></pre>
+
+<p><img src="https://sbinet.github.io/code/2017-10-11/gauss.png" alt="plot-gauss" /></p>
+
+<p>OK enough for today.</p>
+
+                    </div>
+                    
+                </section>
+            </div>
+            <div class="footer">
+    <div class="pure-menu pure-menu-horizontal pure-menu-open">
+        <ul>
+            <li>Powered by <a class="hugo" href="https://gohugo.io/" target="_blank">hugo</a></li>
+        </ul>
+    </div>
+</div>
+<script src="https://sbinet.github.io/js/all.min.js"></script>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', '', 'auto');
+ga('send', 'pageview');
+
+</script>
+
+</body>
+</html>

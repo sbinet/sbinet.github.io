@@ -12,16 +12,25 @@
     <item>
       <title>Go</title>
       <link>https://sbinet.github.io/categories/go/</link>
-      <pubDate>Tue, 10 Oct 2017 11:07:29 +0200</pubDate>
+      <pubDate>Wed, 11 Oct 2017 16:20:00 +0200</pubDate>
       
       <guid>https://sbinet.github.io/categories/go/</guid>
       <description></description>
     </item>
     
     <item>
+      <title>Go Hep</title>
+      <link>https://sbinet.github.io/categories/go-hep/</link>
+      <pubDate>Wed, 11 Oct 2017 16:20:00 +0200</pubDate>
+      
+      <guid>https://sbinet.github.io/categories/go-hep/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Gonum</title>
       <link>https://sbinet.github.io/categories/gonum/</link>
-      <pubDate>Tue, 10 Oct 2017 11:07:29 +0200</pubDate>
+      <pubDate>Wed, 11 Oct 2017 16:20:00 +0200</pubDate>
       
       <guid>https://sbinet.github.io/categories/gonum/</guid>
       <description></description>
@@ -30,7 +39,7 @@
     <item>
       <title>Hep</title>
       <link>https://sbinet.github.io/categories/hep/</link>
-      <pubDate>Tue, 10 Oct 2017 11:07:29 +0200</pubDate>
+      <pubDate>Wed, 11 Oct 2017 16:20:00 +0200</pubDate>
       
       <guid>https://sbinet.github.io/categories/hep/</guid>
       <description></description>
@@ -60,6 +69,15 @@
       <pubDate>Tue, 10 Oct 2017 11:07:29 +0200</pubDate>
       
       <guid>https://sbinet.github.io/categories/minuit/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Monte Carlo</title>
+      <link>https://sbinet.github.io/categories/monte-carlo/</link>
+      <pubDate>Wed, 11 Oct 2017 16:20:00 +0200</pubDate>
+      
+      <guid>https://sbinet.github.io/categories/monte-carlo/</guid>
       <description></description>
     </item>
     
