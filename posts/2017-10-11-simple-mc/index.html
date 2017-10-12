@@ -143,7 +143,7 @@ It&rsquo;s probably a good idea in your libraries to not rely on these convenien
 
 <p>Running this program gives:</p>
 
-<pre><code class="language-sh">$&gt; go run ./mc.go
+<pre><code class="language-sh">$&gt; go run ./mc-0.go
 0.8487305991992138
 0.6451080292174168
 0.7382079884862905
@@ -205,7 +205,7 @@ Then we fill it with the value <code>r</code> and an associated weight (here, th
 
 <p>Running the code creates a <code>uniform.png</code> file:</p>
 
-<pre><code class="language-sh">$&gt; go run ./mc.go
+<pre><code class="language-sh">$&gt; go run ./mc-1.go
 </code></pre>
 
 <p><img src="https://sbinet.github.io/code/2017-10-11/uniform.png" alt="plot-uniform" /></p>
@@ -239,6 +239,9 @@ Let&rsquo;s add a new distribution: the standard normal distribution.</p>
 </code></pre>
 
 <p>Running the code creates the following new plot:</p>
+
+<pre><code>$&gt; go run ./mc-2.go
+</code></pre>
 
 <p><img src="https://sbinet.github.io/code/2017-10-11/norm.png" alt="plot-norm" /></p>
 
@@ -289,7 +292,7 @@ We&rsquo;ll have to change a bit the definition of our histogram:</p>
 
 <p>Running the program gives:</p>
 
-<pre><code class="language-sh">$&gt; go run mc.go
+<pre><code class="language-sh">$&gt; go run mc-3.go
 gauss: mean=    10.105225624460644
 gauss: std-dev= 5.048629091912316 +/- 0.05048629091912316
 </code></pre>
