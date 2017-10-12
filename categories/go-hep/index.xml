@@ -17,7 +17,7 @@
       
       <guid>https://sbinet.github.io/posts/2017-10-11-simple-mc/</guid>
       <description>Today, we&amp;rsquo;ll investigate the Monte Carlo method. Wikipedia, the ultimate source of truth in the (known) universe has this to say about Monte Carlo:
-Monte Carlo methods (or Monte Carlo experiments) are a broad class of computational algorithms that rely on repeated random sampling to obtain numerical results. [&amp;hellip;] Monte Carlo methods are mainly used in three distinct problem classes: optimization, numerical integration, and generating draws from a probability distribution.</description>
+Monte Carlo methods (or Monte Carlo experiments) are a broad class of computational algorithms that rely on repeated random sampling to obtain numerical results. (&amp;hellip;) Monte Carlo methods are mainly used in three distinct problem classes: optimization, numerical integration, and generating draws from a probability distribution.</description>
     </item>
     
   </channel>
