@@ -41,7 +41,7 @@ $$ e^+ e^- \rightarrow \mu^+\mu^-$$ Both muons are mainly detected and reconstru
       <guid>https://sbinet.github.io/posts/2017-10-09-intro-to-minimization/</guid>
       <description>Switching gears a bit with regard to last week, let&amp;rsquo;s investigate how to perform minimization with Gonum.
 In High Energy Physics, there is a program to calculate numerically:
- a function minimum of F(a) of parameters a_i (with up to 50 parameters), the covariance matrix of these parameters the (asymmetric or parabolic) errors of the parameters from F_min+∆ for arbitrary ∆ the contours of parameter pairs a_i,a_j.  This program is called MINUIT and was originally written by Fred JAMES in FORTRAN.</description>
+ a function minimum of \(F(a)\) of parameters \(a_i\) (with up to 50 parameters), the covariance matrix of these parameters the (asymmetric or parabolic) errors of the parameters from \(F_{min}+\Delta\) for arbitrary \(\Delta\) the contours of parameter pairs \(a_i, a_j\).  This program is called MINUIT and was originally written by Fred JAMES in FORTRAN.</description>
     </item>
     
   </channel>

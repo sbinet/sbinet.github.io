@@ -576,10 +576,10 @@ to perform minimization with <a href="https://gonum.org">Gonum</a>.</p>
 <p>In <em>High Energy Physics</em>, there is a program to calculate numerically:</p>
 
 <ul>
-<li>a function minimum of <code>F(a)</code> of parameters <code>a_i</code> (with up to 50 parameters),</li>
+<li>a function minimum of <code>\(F(a)\)</code> of parameters <code>\(a_i\)</code> (with up to 50 parameters),</li>
 <li>the covariance matrix of these parameters</li>
-<li>the (asymmetric or parabolic) errors of the parameters from <code>F_min+∆</code> for arbitrary <code>∆</code></li>
-<li>the contours of parameter pairs <code>a_i,a_j</code>.</li>
+<li>the (asymmetric or parabolic) errors of the parameters from <code>\(F_{min}+\Delta\)</code> for arbitrary <code>\(\Delta\)</code></li>
+<li>the contours of parameter pairs <code>\(a_i, a_j\)</code>.</li>
 </ul>
 
 <p>This program is called <a href="https://en.wikipedia.org/wiki/MINUIT">MINUIT</a> and was originally written by Fred JAMES in <code>FORTRAN</code>.
@@ -655,13 +655,11 @@ fmt.Printf(&quot;µ-err= %v\n&quot;, merr)
 <p>From the plot above and from first principles, we can assume a Poisson distribution.
 The Poisson probability is:</p>
 
-<pre><code class="language-latex">P(n|\mu) = \mu^{n} / n! * e^{-\mu}
-</code></pre>
+<div>$$P(n|\mu) = \frac{\mu^{n}}{n!} e^{-\mu}$$</div>
 
 <p>This therefore leads to a log-likelihood of:</p>
 
-<pre><code class="language-latex">ln L(\mu) = n ln(\mu) - ln(n!) - \mu
-</code></pre>
+<div>$$\ln L(\mu) = n \ln(\mu) - \ln(n!) - \mu$$</div>
 
 <p>which is the quantity we&rsquo;ll try to optimize.</p>
 
