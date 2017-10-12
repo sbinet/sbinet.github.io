@@ -20,7 +20,7 @@
 http://www.desy.de/~rosem/flc_statistics/data/04_parameters_estimation-C.pdf
 Now, we tackle the L3 LEP data. L3 was an experiment at the Large Electron Positron collider, at CERN, near Geneva. Until 2000, it recorded the decay products of e+e- collisions at center of mass energies up to 208 GeV.
 An example is the muon pair production:
- e+e- -&amp;gt; mu+mu-  Both muons are mainly detected and reconstructed from the tracking system.</description>
+$$ e^+ e^- \rightarrow \mu^+\mu^-$$ Both muons are mainly detected and reconstructed from the tracking system.</description>
     </item>
     
     <item>
