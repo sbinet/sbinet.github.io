@@ -8,11 +8,6 @@
   </url>
   
   <url>
-    <loc>https://sbinet.github.io/posts/2017-10-25-mc-pi/</loc>
-    <lastmod>2017-10-25T10:01:43+02:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://sbinet.github.io/posts/2017-10-11-simple-mc/</loc>
     <lastmod>2017-10-11T16:20:00+02:00</lastmod>
   </url>
@@ -77,7 +72,7 @@
   
   <url>
     <loc>https://sbinet.github.io/categories/gonum/</loc>
-    <lastmod>2017-10-25T10:01:43+02:00</lastmod>
+    <lastmod>2017-10-11T16:20:00+02:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -107,7 +102,7 @@
   
   <url>
     <loc>https://sbinet.github.io/categories/monte-carlo/</loc>
-    <lastmod>2017-10-25T10:01:43+02:00</lastmod>
+    <lastmod>2017-10-11T16:20:00+02:00</lastmod>
     <priority>0</priority>
   </url>
   

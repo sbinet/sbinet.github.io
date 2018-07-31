@@ -23,15 +23,6 @@ As a C++/Python developer and former software architect of one of the four LHC e
     </item>
     
     <item>
-      <title>Computing Pi with Monte Carlo</title>
-      <link>https://sbinet.github.io/posts/2017-10-25-mc-pi/</link>
-      <pubDate>Wed, 25 Oct 2017 10:01:43 +0200</pubDate>
-      
-      <guid>https://sbinet.github.io/posts/2017-10-25-mc-pi/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Simple Monte Carlo with Gonum and Go-HEP</title>
       <link>https://sbinet.github.io/posts/2017-10-11-simple-mc/</link>
       <pubDate>Wed, 11 Oct 2017 16:20:00 +0200</pubDate>
