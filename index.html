@@ -7,7 +7,7 @@
 
     <meta name="description" content="Digital ramblings of a french gopher">
 
-    <meta name="generator" content="Hugo 0.29-DEV" />
+    <meta name="generator" content="Hugo 0.31.1" />
     <meta name="twitter:card" content="summary">
     
     <meta name="twitter:title" content="0xb1ns&gt;&gt; go run &middot; 0xb1ns&gt;&gt; go run">
@@ -69,6 +69,27 @@
         <div>
             
             <div class="posts">
+                
+                <h1 class="content-subhead">25 Oct 2017</h1>
+                <section class="post">
+                    <header class="post-header">
+
+                        <a href="https://sbinet.github.io/posts/2017-10-25-mc-pi/" class="post-title">Computing Pi with Monte Carlo</a>
+
+                        <p class="post-meta">
+                            
+                            
+                                under 
+                                
+                                <a class="post-category post-category-go" href="https://sbinet.github.io/categories/go">go</a><a class="post-category post-category-gonum" href="https://sbinet.github.io/categories/gonum">gonum</a><a class="post-category post-category-Monte Carlo" href="https://sbinet.github.io/categories/monte-carlo">Monte Carlo</a>
+                            
+                        </p>
+                    </header>
+
+                    <div class="post-description">
+                        
+                    </div>
+                </section>
                 
                 <h1 class="content-subhead">11 Oct 2017</h1>
                 <section class="post">
@@ -463,7 +484,7 @@ A = 0.231 +/- 0.052
 
 <h2 id="estimation-with-gonum-optimize">Estimation with <code>gonum/optimize</code></h2>
 
-<p>To let <code>optimize.Local</code> loose on our dataset, we need the angular distribution:</p>
+<p>To let <code>optimize.Minimize</code> loose on our dataset, we need the angular distribution:</p>
 
 <div>$$ f(\theta, A) = \frac{3}{8} (1 + \cos^2 \theta) + A \cos\theta $$ </div>
 
@@ -502,7 +523,7 @@ A = 0.231 +/- 0.052
 	var meth = &amp;optimize.Newton{}
 	var p0 = []float64{0} // initial value for A
 
-	res, err := optimize.Local(p, p0, nil, meth)
+	res, err := optimize.Minimize(p, p0, nil, meth)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -799,7 +820,7 @@ Correlation matrix:
 	var meth = &amp;optimize.Newton{}
 	var p0 = []float64{1} // initial value for mu
 
-	res, err := optimize.Local(p, p0, nil, meth)
+	res, err := optimize.Minimize(p, p0, nil, meth)
 	if err != nil {
 		log.Fatal(err)
 	}

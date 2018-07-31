@@ -7,7 +7,7 @@
 
     <meta name="description" content="">
 
-    <meta name="generator" content="Hugo 0.29-DEV" />
+    <meta name="generator" content="Hugo 0.31.1" />
     <meta name="twitter:card" content="summary">
     
     <meta name="twitter:title" content="Introduction to Minimization with Gonum &middot; 0xb1ns&gt;&gt; go run">
@@ -317,7 +317,7 @@ Correlation matrix:
 	var meth = &amp;optimize.Newton{}
 	var p0 = []float64{1} // initial value for mu
 
-	res, err := optimize.Local(p, p0, nil, meth)
+	res, err := optimize.Minimize(p, p0, nil, meth)
 	if err != nil {
 		log.Fatal(err)
 	}
