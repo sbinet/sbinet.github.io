@@ -283,8 +283,7 @@ But what if we want to generate a gaussian with a mean other than <code>0</code>
 <p>The <a href="https://godoc.org/math/rand#NormFloat64">math/rand.NormFloat64</a> documentation kindly tells us how to achieve this:</p>
 
 <p><em>&ldquo;To produce a different normal distribution, callers can adjust the output using:
-  <code>sample = NormFloat64() * desiredStdDev + desiredMean</code>
-  &ldquo;</em></p>
+  <code>sample = NormFloat64() * desiredStdDev + desiredMean</code>&ldquo;</em></p>
 
 <p>Let&rsquo;s try to generate a gaussian of mean <code>10</code> and standard deviation <code>2</code>.
 We&rsquo;ll have to change a bit the definition of our histogram:</p>

@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://sbinet.github.io/posts/2018-07-31-go-hep-manifesto/</loc>
+    <lastmod>2018-07-31T10:22:04+02:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://sbinet.github.io/posts/2017-10-25-mc-pi/</loc>
     <lastmod>2017-10-25T10:01:43+02:00</lastmod>
   </url>
@@ -49,7 +54,7 @@
   
   <url>
     <loc>https://sbinet.github.io/</loc>
-    <lastmod>2017-10-25T10:01:43+02:00</lastmod>
+    <lastmod>2018-07-31T10:22:04+02:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -60,13 +65,13 @@
   
   <url>
     <loc>https://sbinet.github.io/categories/go/</loc>
-    <lastmod>2017-10-25T10:01:43+02:00</lastmod>
+    <lastmod>2018-07-31T10:22:04+02:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://sbinet.github.io/categories/go-hep/</loc>
-    <lastmod>2017-10-11T16:20:00+02:00</lastmod>
+    <lastmod>2018-07-31T10:22:04+02:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -78,7 +83,7 @@
   
   <url>
     <loc>https://sbinet.github.io/categories/hep/</loc>
-    <lastmod>2017-10-11T16:20:00+02:00</lastmod>
+    <lastmod>2018-07-31T10:22:04+02:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -108,7 +113,7 @@
   
   <url>
     <loc>https://sbinet.github.io/posts/</loc>
-    <lastmod>2017-10-25T10:01:43+02:00</lastmod>
+    <lastmod>2018-07-31T10:22:04+02:00</lastmod>
     <priority>0</priority>
   </url>
   
