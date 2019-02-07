@@ -19,7 +19,7 @@
       <description>Hello again.
 I am starting today an article for arXiv about Go and Go-HEP. I thought structuring my thoughts a bit (in the form of a blog post) would help fluidify the process.
 (HEP) Software is painful In my introduction talk(s) about Go and Go-HEP, such as here, I usually talk about software being painful. HENP software is no exception. It is painful.
-As a C++/Python developer and former software architect of one of the four LHC experiments, I can tell you from vivid experience that software is painful develop.</description>
+As a C++/Python developer and former software architect of one of the four LHC experiments, I can tell you from vivid experience that software is painful to develop.</description>
     </item>
     
     <item>
